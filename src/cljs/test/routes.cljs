@@ -22,11 +22,11 @@
 (defn app-routes []
   (secretary/set-config! :prefix "#")
   (defroute "/" []
-    (global-put! :current-page (pages :home-page)))
+    (global-put! :current-page :home-page))
 
   (defroute "/introduction/second" []
-    (global-put! :current-page (pages :introduction-second)))
+    (global-put! :current-page :introduction-second))
 
   (defroute "/introduction/third" []
-    (global-put! :current-page (pages :introduction-third)))
+    (global-put! :current-page :introduction-third))
   (hook-browser-navigation!))

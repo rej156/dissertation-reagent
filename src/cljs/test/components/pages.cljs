@@ -1,8 +1,11 @@
 (ns test.components.pages
-  (:require [test.components.introduction.home-page :refer [home-page]]
-            [test.components.introduction.second :refer [introduction-second]]
-            ))
+  (:require [test.session :refer [global-state]]
+            [test.components.introduction.home-page :refer [home-page]]
+            [test.components.introduction.second :refer [second]]
+            [test.components.introduction.third :refer [third]]))
 
-(def pages {:home-page home-page
-            :introduction-second introduction-second
-            :introduction-third introduction-third})
+(defn page []
+  (condp = (global-state :current-page)
+    :home-page home-page
+    :introduction-second second
+    :introduction-third third))

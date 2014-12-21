@@ -18,6 +18,7 @@
                  [reagent "0.5.0-alpha"]
                  [reagent-forms "0.2.9"]
                  [secretary "1.2.1"]
+                 [alandipert/storage-atom "1.2.3"]
                  [leiningen "2.5.0"]]
 
   :plugins [[lein-cljsbuild "1.0.3"]
