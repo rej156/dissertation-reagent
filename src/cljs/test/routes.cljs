@@ -29,4 +29,7 @@
 
   (defroute "/introduction/third" []
     (global-put! :current-page :introduction-third))
+
+  (defroute "/introduction/fourth" []
+    (global-put! :current-page :introduction-fourth))
   (hook-browser-navigation!))

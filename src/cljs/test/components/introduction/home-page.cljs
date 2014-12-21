@@ -4,8 +4,7 @@
 
 (defn try-move-next []
   (if-not (empty? (prefs-state :first-name))
-    (do
-      (set! (.-location js/window) "#/introduction/second"))))
+    set! (.-location js/window) "#/introduction/second")))
 
 (defn input [label type id]
   [:div.id
