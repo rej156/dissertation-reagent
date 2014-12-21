@@ -12,7 +12,7 @@
      (set-attr :class "is-dev")
      (prepend (html [:script {:type "text/javascript" :src "/js/out/goog/base.js"}]))
      ;; (prepend (html [:script {:type "text/javascript" :src "/react/react.js"}]))
-     ;; Added 0.12.1 manually
+     ;; Added 0.12.2 manually
      (append  (html [:script {:type "text/javascript"} "goog.require('test.dev')"]))))
 
 (defn browser-repl []
