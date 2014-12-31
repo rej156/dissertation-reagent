@@ -17,4 +17,4 @@
 - and become more resilient"]]
    [:h2 "Would you like to give it a try?*"]
    [:button {:on-click #(try-move-next)} "Yes"]
-   [:button {:on-click #(secretary/dispatch! "/")} "No"]])
+   ])

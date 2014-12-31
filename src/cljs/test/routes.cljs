@@ -1,7 +1,7 @@
 (ns test.routes
   (:require [secretary.core :as secretary :include-macros true :refer-macros [defroute]]
             [test.session :refer [global-put!]]
-            [test.components.pages :refer [pages]]
+            [test.components.pages :refer [page]]
             [goog.events :as events]
             [goog.history.EventType :as EventType])
   (:import goog.History))
