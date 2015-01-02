@@ -32,4 +32,16 @@
 
   (defroute "/introduction/fourth" []
     (global-put! :current-page :introduction-fourth))
+
+  (defroute "/introduction/fifth" []
+    (global-put! :current-page :introduction-fifth))
+
+  (defroute "/introduction/sixth" []
+    (global-put! :current-page :introduction-sixth))
+
+  (defroute "/introduction/seventh" []
+    (global-put! :current-page :introduction-seventh))
+
+  (defroute "/introduction/mood-assessment" []
+    (global-put! :current-page :mood-assessment))
   (hook-browser-navigation!))

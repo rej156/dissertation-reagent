@@ -16,5 +16,4 @@
     [:li "Learn to adopt a more positive attitude towards the events in your life
 - and become more resilient"]]
    [:h2 "Would you like to give it a try?*"]
-   [:button {:on-click #(try-move-next)} "Yes"]
-   ])
+   [:button {:on-click #(try-move-next)} "Yes"]])
