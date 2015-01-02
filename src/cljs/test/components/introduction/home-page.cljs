@@ -1,6 +1,7 @@
 (ns test.components.introduction.home-page
   (:require [reagent-forms.core :refer [bind-fields]]
-            [test.session :as session :refer [prefs prefs-state]]))
+            [test.session :as session :refer [prefs prefs-state]]
+            [instaparse.core :as insta]))
 
 (defn try-move-next []
   (if-not (empty? (prefs-state :first-name))

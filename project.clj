@@ -19,7 +19,8 @@
                  [reagent-forms "0.2.9"]
                  [secretary "1.2.1"]
                  [alandipert/storage-atom "1.2.3"]
-                 [leiningen "2.5.0"]]
+                 [leiningen "2.5.0"]
+                 [com.lucasbradstreet/instaparse-cljs "1.3.4.2"]]
 
   :plugins [[lein-cljsbuild "1.0.3"]
             [cider/cider-nrepl "0.8.2-SNAPSHOT"]
