@@ -4,7 +4,7 @@
 (defn try-move-next []
   (set! (.-location js/window) "#/introduction/fourth"))
 
-(defn third []
+(defn component []
   [:div.introduction-third
    [:h2 "If we work together, we will \"chat\" every few days. I can help you:"]
    [:ul

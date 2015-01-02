@@ -22,6 +22,6 @@
    [:br]
    [:button {:on-click #(try-move-next)} "Continue"]])
 
-(defn home-page []
+(defn component []
   [:div.home-page
    [bind-fields form-template prefs]])
