@@ -42,10 +42,9 @@
           "clarity" [:li "I need clarity - can't get my mind to focus"]
           "resilient" [:li "I'd like to be able to cope better with life, to be
   more resilient"]
-          "liz" nil)))]
-
+          "liz" [:li "I am simply curious about you Liz and want to see how this thing works"])))]
    (input (str "How happy do you feel now? " (prefs-state :first-name)) :numeric
-          :mood.happy nil?)
+          :mood.happy nil)
    [:button {:on-click #(try-move-next)} "Submit"]])
 
 (defn component []

@@ -1,9 +1,8 @@
 (ns test.components.introduction.mood-assessment
   (:require [test.session :refer [global-put! global-state prefs-state prefs]]
-            [reagent.core :as reagent]
+            [reagent.core :as reagent :refer [atom]]
+            [secretary.core :as secretary]
             [reagent-forms.core :refer [bind-fields]]))
-
-(def counter (atom 0))
 
 (def moods [{:confidence "How confident?"}
             {:cheerfulness "How cheerful?"}
@@ -12,27 +11,22 @@
             {:assured "Finally - how assured and brave do you feel right now?"}])
 
 (defn try-move-next []
-  (if-not (= 4 @counter)
-    (swap! counter inc)
-    (.log js/console "You motherfucking beast!")))
-    ;;(set! (.-location js/window) "#/application/main")))
+  (secretary/dispatch! "/introduction/mood-assessment-1"))
 
 (defn input [id]
   [:div.id
-   [:input.form-control {:default-value 3
-                         :min 1
+   [:input.form-control {:min 1
                          :max 7
                          :field :numeric
                          :id id}]])
 
 (def form-template
   [:div.form-template
-   [:h1 (vals (get moods @counter))]
-   (input (symbol (str "mood." (name (first (keys (get moods @counter)))))))
+   [:h1 (vals (get moods 0))]
+   (input :mood.confidence)
    [:button {:on-click #(try-move-next)} "Continue"]
    ])
 
 (defn component []
   [:div.mood-assessment
-   [bind-fields form-template prefs]
-   ])
+   [bind-fields form-template prefs]])
