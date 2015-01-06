@@ -1,12 +1,15 @@
 (ns test.components.introduction.mood-assessment-4
-  (:require [test.session :refer [global-put! global-state prefs-state prefs]]
+  (:require [test.session :refer [global-put! local-put! global-state prefs-state prefs]]
             [reagent.core :as reagent]
             [secretary.core :as secretary]
             [test.components.introduction.mood-assessment :as assessment]
             [reagent-forms.core :refer [bind-fields]]))
 
 (defn try-move-next []
-  (set! (.-location js/window) "#/introduction/fourth"))
+  (do
+    (set! (.-location js/window) "#/introduction/mood-evaluation")
+    (swap! prefs assoc-in [:mood :score]
+           (- 24 (reduce + (vals (prefs-state :mood)))))))
 
 (defn input [id]
   [:div.id

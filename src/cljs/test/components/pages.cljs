@@ -7,6 +7,7 @@
             [test.components.introduction.fifth :as fifth]
             [test.components.introduction.sixth :as sixth]
             [test.components.introduction.seventh :as seventh]
+            [test.components.introduction.mood-assessment :as mood-assessment-initial]
             [test.components.introduction.mood-assessment :as mood-assessment]
             [test.components.introduction.mood-assessment-1 :as
              mood-assessment-1]
@@ -14,7 +15,9 @@
              mood-assessment-2]
             [test.components.introduction.mood-assessment-3 :as
              mood-assessment-3]
-            [test.components.introduction.mood-assessment-4 :as mood-assessment-4]))
+            [test.components.introduction.mood-assessment-4 :as
+             mood-assessment-4]
+            [test.components.introduction.mood-evaluation :as mood-evaluation]))
 
 (defn page []
   (condp = (global-state :current-page)
@@ -25,9 +28,11 @@
     :introduction-fifth fifth/component
     :introduction-sixth sixth/component
     :introduction-seventh seventh/component
+    :mood-assessment-initial mood-assessment-initial/component
     :mood-assessment mood-assessment/component
     :mood-assessment-1 mood-assessment-1/component
     :mood-assessment-2 mood-assessment-2/component
     :mood-assessment-3 mood-assessment-3/component
     :mood-assessment-4 mood-assessment-4/component
+    :mood-evaluation mood-evaluation/component
     ))

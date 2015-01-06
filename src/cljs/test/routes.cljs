@@ -56,4 +56,7 @@
 
   (defroute "/introduction/mood-assessment-4" []
     (global-put! :current-page :mood-assessment-4))
+
+  (defroute "/introduction/mood-evaluation" []
+    (global-put! :current-page :mood-evaluation))
   (hook-browser-navigation!))

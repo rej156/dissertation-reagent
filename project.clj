@@ -7,7 +7,7 @@
   :source-paths ["src/clj" "src/cljs"]
 
   :dependencies [[org.clojure/clojure "1.6.0"]
-                 [org.clojure/clojurescript "0.0-2496" :scope "provided"]
+                 [org.clojure/clojurescript "0.0-2511" :scope "provided"]
                  [ring "1.3.2"]
                  [compojure "1.3.1"]
                  [enlive "1.1.5"]
@@ -16,7 +16,7 @@
                  [com.cemerick/piggieback "0.1.3"]
                  [weasel "0.4.2"]
                  [reagent "0.5.0-alpha"]
-                 [reagent-forms "0.2.9"]
+                 [reagent-forms "0.3.8"]
                  [secretary "1.2.1"]
                  [alandipert/storage-atom "1.2.3"]
                  [leiningen "2.5.0"]
