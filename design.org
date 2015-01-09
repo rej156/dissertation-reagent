@@ -1,0 +1,70 @@
+| Mood | Score | Core Value           | Score | Vision | Goal X | Step X |
+|      |       | Business/Career      |       |        |        |        |
+|      |       | Finances             |       |        |        |        |
+|      |       | Health               |       |        |        |        |
+|      |       | Family and Friends   |       |        |        |        |
+|      |       | Romance              |       |        |        |        |
+|      |       | Personal Growth      |       |        |        |        |
+|      |       | Fun and Recreation   |       |        |        |        |
+|      |       | Physical Environment |       |        |        |        |
+
+Stage 1-8
+For each id (ID = Core Value tag)
+You parse the current state of each core Value
+On the screen you'd display the final parsed state of the core value (i.e. Add
+a goal for Career or whatever)
+On every turn/user input, increment the counter and parse the next core value
+finite state machine
+(Only 3 at a time)
+
+For the third option, if the mood score hasn't been assessed for awhile,
+Display the option to rank your mood
+Start intervention loop if user chooses to improve mood
+
+[0,1,2,3,4,5,6,7]
+Range 3 out of the above array
+Parse the first core Value
+Occupy the first and second option for example with:
+1) Add a new goal for Career
+2) Add the next baby step for goal "XYZ" in Career
+3) - Add a new goal for finances?
+
+Score = 1
+Vision = 2
+Goal = 3
+If no 3s, only display one create a goal option
+Based on how many 3s there are,
+    Add a step for that nth goal
+Step = 4
+
+Increment counter for range 3 base
+
+[
+    {
+        :Career {:history '(1 2 3 4 3)
+                 :score 2
+                 :vision "Vision name"
+                 :goals [{
+                     :name "Goal Name"
+                     :description "Goal Description"
+                     :something "Something"
+                     :steps [{
+                     }]
+                 }]
+        }
+     }
+
+    {
+        :Finances {:history '(1 2 3 4 3)
+                 :score 2
+                 :vision "Baller"
+                 :goals [{
+                     :name "Goal Name"
+                     :description "Goal Description"
+                     :something "Something"
+                     :steps [{
+                     }]
+                 }]
+        }
+     }
+]
