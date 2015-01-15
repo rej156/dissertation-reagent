@@ -23,7 +23,7 @@
                  [com.lucasbradstreet/instaparse-cljs "1.3.4.2"]]
 
   :plugins [[lein-cljsbuild "1.0.3"]
-            [cider/cider-nrepl "0.8.2-SNAPSHOT"]
+            [cider/cider-nrepl "0.9.0-SNAPSHOT"]
             [lein-ancient "0.6.0-SNAPSHOT"]
             [lein-environ "1.0.0"]]
 

@@ -42,6 +42,9 @@
   (defroute "/introduction/seventh" []
     (global-put! :current-page :introduction-seventh))
 
+  (defroute "/introduction/mood-assessment-initial" []
+    (global-put! :current-page :mood-assessment-initial))
+
   (defroute "/introduction/mood-assessment" []
     (global-put! :current-page :mood-assessment))
 

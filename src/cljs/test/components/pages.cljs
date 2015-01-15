@@ -7,7 +7,7 @@
             [test.components.introduction.fifth :as fifth]
             [test.components.introduction.sixth :as sixth]
             [test.components.introduction.seventh :as seventh]
-            [test.components.introduction.mood-assessment :as mood-assessment-initial]
+            [test.components.introduction.mood-assessment-initial :as mood-assessment-initial]
             [test.components.introduction.mood-assessment :as mood-assessment]
             [test.components.introduction.mood-assessment-1 :as
              mood-assessment-1]

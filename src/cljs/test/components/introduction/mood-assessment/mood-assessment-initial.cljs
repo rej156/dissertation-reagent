@@ -18,7 +18,7 @@
   [:div.form-template
    [:h1 "How happy are you?"]
    (input :mood.happy)
-   [:button {:on-click #(try-move-next)} ""]
+   [:button {:on-click #(try-move-next)} "Continue"]
    ])
 
 (defn component []
