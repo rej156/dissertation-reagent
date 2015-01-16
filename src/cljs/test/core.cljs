@@ -7,8 +7,12 @@
 
 (def mobile-parser
   (insta/parser
-   "S = A
-    A = 'a'+"))
+   "S = R V G+
+    R = 'a'
+    V = 'b'
+    G = g s+
+    g = 'c'
+    s = 'd'"))
 
 (defn page-render []
   [:div.app-container
@@ -21,7 +25,7 @@
                                                  (.log js/console (pr-str
   mobile-parser))
                                                  (.log js/console (str "Parsed
-  output:" (nth (get (mobile-parser "aaaa") 1) 2))))
+  output:" (nth (get (mobile-parser "abcdddd") 1) 2))))
                          :render page-render}))
 
 (defn main []

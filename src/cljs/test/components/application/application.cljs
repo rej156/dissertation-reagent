@@ -1,4 +1,4 @@
-(ns test.component.application
+(ns test.components.application
   (:require [test.session :refer [global-put! global-state prefs-state prefs]]
             [reagent.core :as reagent :refer [atom]]
             [secretary.core :as secretary]
@@ -33,9 +33,9 @@
 
 (def form-template
   [:div.form-template
-
+   [:h1 "lol"]
    ])
 
 (defn component []
-  [:div.introduction-sixth
+  [:div.application
    [bind-fields form-template prefs]])

@@ -17,7 +17,8 @@
              mood-assessment-3]
             [test.components.introduction.mood-assessment-4 :as
              mood-assessment-4]
-            [test.components.introduction.mood-evaluation :as mood-evaluation]))
+            [test.components.introduction.mood-evaluation :as mood-evaluation]
+            [test.components.application :as application]))
 
 (defn page []
   (condp = (global-state :current-page)
@@ -35,4 +36,5 @@
     :mood-assessment-3 mood-assessment-3/component
     :mood-assessment-4 mood-assessment-4/component
     :mood-evaluation mood-evaluation/component
+    :application application/component
     ))
