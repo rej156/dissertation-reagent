@@ -1,3 +1,5 @@
-h1 {
-  text-decoration: underline;
+@media(max-width:800px){
+  .content {
+    max-width: 800px;
+  }
 }
