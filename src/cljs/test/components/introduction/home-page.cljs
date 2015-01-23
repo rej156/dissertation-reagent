@@ -11,7 +11,7 @@
     (reset! above-800 true)
     (reset! above-800 false)))
 
-(defn photo [img-url title author date flickr-url]
+(defn photo [];;[img-url title author date flickr-url]
   [:div.row
    [:img {:src "https://avatars.githubusercontent.com/u/109629?v=3&s=32"}]
    ])

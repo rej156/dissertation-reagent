@@ -13,8 +13,9 @@
 
 (defn flickr-async []
   (go (let [response (<! (http/get "https://api.flickr.com/services/feeds/photos_public.gne?tags=potato&tagmode=all&format=json" ))]
-        (.log js/console (:status response))
-        (.log js/console (map :items (:body response))))))
+        (prn (:status response))
+        (log (:body response))
+        )))
 
 (defn page-component []
   (reagent/create-class {:component-will-mount (do
