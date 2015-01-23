@@ -19,7 +19,8 @@
                  [reagent-forms "0.2.9"]
                  [secretary "1.2.1"]
                  [alandipert/storage-atom "1.2.3"]
-                 [leiningen "2.5.0"]]
+                 [leiningen "2.5.0"]
+                 [cljs-http "0.1.24"]]
 
   :plugins [[lein-cljsbuild "1.0.3"]
             [cider/cider-nrepl "0.9.0-SNAPSHOT"]
