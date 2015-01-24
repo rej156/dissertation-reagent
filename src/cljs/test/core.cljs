@@ -13,14 +13,16 @@
 
 (defn flickr-async []
   (go (let [response (<! (http/get "https://api.flickr.com/services/feeds/photos_public.gne?tags=potato&tagmode=all&format=json" ))]
-        (prn (:status response))
-        (log (:body response))
+        (.log js/console (:status response))
+        (def lol (:body response))
+        ;;Use https://github.com/cognitect/transit-cljs
+        ;; like http://swannodette.github.io/2014/07/26/transit--clojurescript/
         )))
 
 (defn page-component []
-  (reagent/create-class {:component-will-mount (do
-                                                 (routes/app-routes)
-                                                 (flickr-async))
+  (reagent/create-class {:component-will-mount #(do
+                                                  (routes/app-routes)
+                                                  (flickr-async))
                          :render page-render}))
 
 (defn main []
