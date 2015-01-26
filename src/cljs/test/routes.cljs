@@ -24,12 +24,4 @@
   (defroute "/" []
     (global-put! :current-page :home-page))
 
-  (defroute "/introduction/second" []
-    (global-put! :current-page :introduction-second))
-
-  (defroute "/introduction/third" []
-    (global-put! :current-page :introduction-third))
-
-  (defroute "/introduction/fourth" []
-    (global-put! :current-page :introduction-fourth))
   (hook-browser-navigation!))

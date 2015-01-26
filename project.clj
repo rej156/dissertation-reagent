@@ -20,7 +20,9 @@
                  [secretary "1.2.1"]
                  [alandipert/storage-atom "1.2.3"]
                  [leiningen "2.5.0"]
-                 [cljs-http "0.1.24"]]
+                 [cljs-http "0.1.24"]
+                 [com.cognitect/transit-cljs "0.8.202"]
+                 [cljs-ajax "0.3.8"]]
 
   :plugins [[lein-cljsbuild "1.0.3"]
             [cider/cider-nrepl "0.9.0-SNAPSHOT"]
