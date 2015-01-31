@@ -41,8 +41,7 @@
      ]]
    [:div.mood-good {:field :container :visible? #(<= 0 (get-in @prefs [:mood :score]))}
     [:h3  "Looks like your mood is good!"]
-    [:button {:on-click #(set! (.-location js/window) "#/application/")} "Continue"]]])
-
+    [:button {:on-click #(set! (.-location js/window) "#/application")} "Continue"]]])
 
 (defn component []
   [:div.mood-evaluation
