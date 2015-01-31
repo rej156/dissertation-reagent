@@ -10,7 +10,7 @@
    [:label label]
    [:input.form-control {:field type :id id}]])
 
-(def first-option nil)
+
 (def second-option nil)
 (def third-option nil)
 

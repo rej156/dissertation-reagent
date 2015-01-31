@@ -5,8 +5,6 @@
             [test.routes :as routes]
             [instaparse.core :as insta]))
 
-
-
 (defn page-render []
   [:div.app-container
    [(page)]])

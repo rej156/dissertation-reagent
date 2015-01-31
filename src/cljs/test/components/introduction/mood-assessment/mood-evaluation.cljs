@@ -10,7 +10,7 @@
 (defn try-move-next []
   (do
     ;;conj-in [:gratitude []] (merge-atoms prefs gratitude)
-    (set! (.-location js/window) "#/application/")
+    (set! (.-location js/window) "#/application")
     ))
 
 (def form-template
