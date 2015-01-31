@@ -10,7 +10,7 @@
    [:label label]
    [:input.form-control {:field type :id id}]])
 
-
+(def first-option nil)
 (def second-option nil)
 (def third-option nil)
 
@@ -125,20 +125,19 @@
     g = 'c'
     s = 'd'"))
 
-;; (defn populate-with-no-scores [scores]
-;;   (loop [remaining-scores scores
-;;          counter 0]
-;;     (when (not-empty remaining-scores)
-;;       (let [current (first remaining-scores)]
-;;         (if (empty? (:history (first (vals current))))
-;;           (if (nil? first-option)
-;;             (set! first-option counter)
-;;             (if (nil? second-option)
-;;               (set! second-option counter)
-;;               (if (nil? third-option)
-;;                 (set! third-option counter))))))
-;;       (recur (rest remaining-scores) (inc counter)))))
-
+(defn populate-with-no-scores [scores]
+  (loop [remaining-scores scores
+         counter 0]
+    (when (not-empty remaining-scores)
+      (let [current (get @core-values-state counter)]
+        (if (nil? (:score (first (vals current))))
+          (if (nil? first-option)
+            (set! first-option counter)
+            (if (nil? second-option)
+              (set! second-option counter)
+              (if (nil? third-option)
+                (set! third-option counter))))))
+      (recur (rest remaining-scores) (inc counter)))))
 
 ;; (loop [core-values @core-values-state]
 ;;     (when (not-empty core-values)
@@ -153,19 +152,19 @@
 ;;       (recur (rest core-values))))
 
 (def map-scores-to-vec
-  (map #(:score (first (vals %))) @core-values-state))
+  (mapv #(:score (first (vals %))) @core-values-state))
 
-;; (defn populate-remaining-with-lowest-scores [scores]
-;;   (loop [remaining-scores scores]
-;;     (when (not-empty remaining-scores)
-;;       (let [smallest-index (.indexOf remaining-scores (min remaining-scores))]
-;;         (if (nil? first-option)
-;;           (set! first-option smallest-index)
-;;           (if (nil? second-option)
-;;             (set! second-option smallest-index)
-;;             (if (nil? third-option)
-;;               (set! third-option smallest-index)))))
-;;       (recur (rest remaining-scores)))))
+(defn populate-remaining-with-lowest-scores [scores]
+  (loop [remaining-scores scores]
+    (when (not-empty remaining-scores)
+      (let [smallest-index (.indexOf remaining-scores (apply min remaining-scores))]
+        (if (nil? first-option)
+          (set! first-option smallest-index)
+          (if (nil? second-option)
+            (set! second-option smallest-index)
+            (if (nil? third-option)
+              (set! third-option smallest-index)))))
+      (recur (rest remaining-scores)))))
 
 ;; Do we populate first-options with the indexes of the core values with no
 ;; scores then the smallest scores?
@@ -222,20 +221,7 @@
   (set! (.-location js/window) "#/introduction/seventh"))
 
 (def form-template
-  [:div.form-template
-   [:h1 "Options"]
-   [:ul
-    [:li
-     [:label "First option"]
-     ]
-    [:li
-     [:label "Second option"]
-     ]
-    [:li
-     [:label "Third option"]
-     ]
-    ]
-   ])
+  )
 
 (defn component []
   [:div.application
@@ -243,7 +229,24 @@
                      mobile-parser))
    (.log js/console (str "Parsed
   output:" (nth (get (mobile-parser "abcd") 1) 1)))
-   ;; (populate-with-no-scores map-scores-to-vec)
-   ;; (populate-remaining-with-lowest-scores map-scores-to-vec)
-   (.log js/console map-scores-to-vec)
-   [bind-fields form-template prefs]])
+   (populate-with-no-scores map-scores-to-vec)
+   (populate-remaining-with-lowest-scores map-scores-to-vec)
+   [:div.form-template
+    [:h1 "Options"]
+    [:ul
+     [:li
+      [:label "First option"]
+      [:p (str first-option)]
+      ]
+     [:li
+      [:label "Second option"]
+      [:p (str second-option)]
+      ]
+     [:li
+      [:label "Third option"]
+      [:p (str third-option)]
+      ]
+     ]
+    ]
+   ;; [bind-fields form-template prefs]
+   ])
