@@ -40,7 +40,7 @@
                                           }
                                }
                               {:health {:history ""
-                                        :score 1
+                                        :score 5
                                         :vision ""
                                         :current-goal-name ""
                                         :current-step ""
@@ -52,7 +52,7 @@
                                         }
                                }
                               {:family {:history ""
-                                        :score 1
+                                        :score 3
                                         :vision ""
                                         :current-goal-name ""
                                         :current-step ""
@@ -64,7 +64,7 @@
                                         }
                                }
                               {:romance {:history ""
-                                         :score 1
+                                         :score 4
                                          :vision ""
                                          :current-goal-name ""
                                          :current-step ""
@@ -88,7 +88,7 @@
                                                  }
                                }
                               {:fun {:history ""
-                                     :score 1
+                                     :score 2
                                      :vision ""
                                      :current-goal-name ""
                                      :current-step ""
@@ -100,7 +100,7 @@
                                      }
                                }
                               {:physical-environment {:history ""
-                                                      :score 1
+                                                      :score 3
                                                       :vision ""
                                                       :current-goal-name ""
                                                       :current-step ""
@@ -139,31 +139,27 @@
                 (set! third-option counter))))))
       (recur (rest remaining-scores) (inc counter)))))
 
-;; (loop [core-values @core-values-state]
-;;     (when (not-empty core-values)
-;;       (let [current (first core-values)]
-;;         (if (empty? (:history (first (vals current))))
-;;           (if (nil? first-option)
-;;             (set! first-option (name (first (keys current))))
-;;             (if (nil? second-option)
-;;               (set! second-option (name (first (keys current)))))
-;;             (if (nil? third-option)
-;;               (set! third-option (name (first (keys current))))))))
-;;       (recur (rest core-values))))
-
 (def map-scores-to-vec
   (mapv #(:score (first (vals %))) @core-values-state))
+
+(defn index-of [coll v]
+  (let [i (count (take-while #(not= v %) coll))]
+    (when (or (< i (count coll))
+            (= v (last coll)))
+      i)))
 
 (defn populate-remaining-with-lowest-scores [scores]
   (loop [remaining-scores scores]
     (when (not-empty remaining-scores)
-      (let [smallest-index (.indexOf remaining-scores (apply min remaining-scores))]
-        (if (nil? first-option)
-          (set! first-option smallest-index)
-          (if (nil? second-option)
-            (set! second-option smallest-index)
-            (if (nil? third-option)
-              (set! third-option smallest-index)))))
+      (let [smallest-index (index-of remaining-scores (apply min remaining-scores))
+            current-score (apply min remaining-scores)]
+        (if-not (nil? current-score)
+          (if (nil? first-option)
+            (set! first-option smallest-index)
+            (if (nil? second-option)
+              (set! second-option smallest-index)
+              (if (nil? third-option)
+                (set! third-option smallest-index))))))
       (recur (rest remaining-scores)))))
 
 ;; Do we populate first-options with the indexes of the core values with no
