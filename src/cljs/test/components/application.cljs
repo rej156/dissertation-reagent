@@ -114,11 +114,19 @@
 (def first-option nil)
 (def second-option nil)
 (def third-option nil)
+
 (defn option-name [option]
   (-> (get @core-values-state option)
       (keys)
       (first)
       (name)))
+
+(defn option-history [option]
+  (-> (get @core-values-state option)
+      (vals)
+      (first)
+      (:history)))
+
 
 ;;recursively iterate, if first-option isn't nil, set it as the first
 ;;core-value that has a nil score or the lowest score
@@ -261,7 +269,8 @@
    [:div.form-template
     [:h1 "Options"]
     [:ul
-     [:li
+     [:li {:on-click #(swap! core-values-state assoc-in [first-option (keyword
+  (option-name first-option)) :history] (str (option-history first-option) "abcdd"))}
       [:label "First option"]
       [:p (parse-option-history first-option)]
       ]
