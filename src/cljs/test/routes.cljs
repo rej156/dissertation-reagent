@@ -64,7 +64,6 @@
     (global-put! :current-page :mood-evaluation))
 
   (defroute "/application" []
-    (.log js/console "lol")
     (global-put! :current-page :application))
 
   (hook-browser-navigation!))

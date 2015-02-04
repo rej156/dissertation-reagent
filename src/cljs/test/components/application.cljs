@@ -10,9 +10,6 @@
    [:label label]
    [:input.form-control {:field type :id id}]])
 
-(def first-option nil)
-(def second-option nil)
-(def third-option nil)
 
 (def core-values-state (atom [
                               {:career {:history ""
@@ -113,12 +110,22 @@
                                }
                               ]))
 
+
+(def first-option nil)
+(def second-option nil)
+(def third-option nil)
+(defn option-name [option]
+  (-> (get @core-values-state option)
+      (keys)
+      (first)
+      (name)))
+
 ;;recursively iterate, if first-option isn't nil, set it as the first
 ;;core-value that has a nil score or the lowest score
 
 (def mobile-parser
   (insta/parser
-   "S = R V G+
+   "S = R* V* (G+)*
     R = 'a'
     V = 'b'
     G = g s+
@@ -161,6 +168,32 @@
               (if (nil? third-option)
                 (set! third-option smallest-index))))))
       (recur (rest remaining-scores)))))
+
+(defn test-option-history [option]
+ (name (first (last (mobile-parser (-> (get @core-values-state
+                                       option)
+                                  (vals)
+                                  (first)
+                                  (:history)))))))
+
+(defn initial-parsed-option-history [option]
+  (last (mobile-parser (-> (get @core-values-state
+                                option)
+                           (vals)
+                           (first)
+                           (:history)))))
+
+(defn final-parsing [parsed-option option-name]
+  (condp = (first parsed-option)
+    :R (str "Add a vision for " option-name)
+    :V (str "Add a goal for " option-name)
+    :G (str "Add a step for " option-name " goal XOYO")
+    "Failed"))
+
+(defn parse-option-history [option]
+  (condp = (initial-parsed-option-history option)
+      :S (str "Add a score for " (option-name option))
+      (final-parsing (initial-parsed-option-history option) (option-name option))))
 
 ;; Do we populate first-options with the indexes of the core values with no
 ;; scores then the smallest scores?
@@ -221,10 +254,8 @@
 
 (defn component []
   [:div.application
-   (.log js/console (pr-str
-                     mobile-parser))
-   (.log js/console (str "Parsed
-  output:" (nth (get (mobile-parser "abcd") 1) 1)))
+   ;; (.log js/console (pr-str mobile-parser))
+   ;; (.log js/console (str "Parsed output:" (nth (get (mobile-parser "abcd") 1) 1)))
    (populate-with-no-scores map-scores-to-vec)
    (populate-remaining-with-lowest-scores map-scores-to-vec)
    [:div.form-template
@@ -232,15 +263,15 @@
     [:ul
      [:li
       [:label "First option"]
-      [:p (str first-option)]
+      [:p (parse-option-history first-option)]
       ]
      [:li
       [:label "Second option"]
-      [:p (str second-option)]
+      [:p (parse-option-history second-option)]
       ]
      [:li
       [:label "Third option"]
-      [:p (str third-option)]
+      [:p (parse-option-history third-option)]
       ]
      ]
     ]
