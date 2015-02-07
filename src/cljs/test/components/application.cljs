@@ -270,7 +270,12 @@
     [:h1 "Options"]
     [:ul
      [:li {:on-click #(swap! core-values-state assoc-in [first-option (keyword
-  (option-name first-option)) :history] (str (option-history first-option) "abcdd"))}
+  (option-name first-option)) :history] (str (option-history first-option) "a"))}
+      ;; Click -> Set current option to a var -> condp on history parse for
+      ;; selected option -> call set location on current option to render the
+      ;; next module
+      ;; Next module reads from current option var and modifies its history
+      ;; state string after
       [:label "First option"]
       [:p (parse-option-history first-option)]
       ]
