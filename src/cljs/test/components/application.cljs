@@ -11,7 +11,7 @@
    [:input.form-control {:field type :id id}]])
 
 
-(def core-values-state (atom [
+(defonce core-values-state (atom [
                               {:career {:history ""
                                         :score nil
                                         :vision ""
@@ -37,7 +37,7 @@
                                           }
                                }
                               {:health {:history ""
-                                        :score 5
+                                        :score nil
                                         :vision ""
                                         :current-goal-name ""
                                         :current-step ""
@@ -49,7 +49,7 @@
                                         }
                                }
                               {:family {:history ""
-                                        :score 3
+                                        :score nil
                                         :vision ""
                                         :current-goal-name ""
                                         :current-step ""
@@ -61,7 +61,7 @@
                                         }
                                }
                               {:romance {:history ""
-                                         :score 4
+                                         :score nil
                                          :vision ""
                                          :current-goal-name ""
                                          :current-step ""
@@ -73,7 +73,7 @@
                                          }
                                }
                               {:personal-growth {:history ""
-                                                 :score 1
+                                                 :score nil
                                                  :vision ""
                                                  :current-goal-name ""
                                                  :current-step ""
@@ -85,7 +85,7 @@
                                                  }
                                }
                               {:fun {:history ""
-                                     :score 2
+                                     :score nil
                                      :vision ""
                                      :current-goal-name ""
                                      :current-step ""
@@ -97,7 +97,7 @@
                                      }
                                }
                               {:physical-environment {:history ""
-                                                      :score 3
+                                                      :score nil
                                                       :vision ""
                                                       :current-goal-name ""
                                                       :current-step ""
@@ -116,16 +116,18 @@
 (def third-option nil)
 
 (defn option-name [option]
-  (-> (get @core-values-state option)
-      (keys)
-      (first)
-      (name)))
+  (if-not (nil? option)
+    (-> (get @core-values-state option)
+        (keys)
+        (first)
+        (name))))
 
 (defn option-history [option]
-  (-> (get @core-values-state option)
-      (vals)
-      (first)
-      (:history)))
+  (if-not (nil? option)
+    (-> (get @core-values-state option)
+        (vals)
+        (first)
+        (:history))))
 
 ;;recursively iterate, if first-option isn't nil, set it as the first
 ;;core-value that has a nil score or the lowest score
@@ -153,13 +155,13 @@
                 (set! third-option counter))))))
       (recur (rest remaining-scores) (inc counter)))))
 
-(def map-scores-to-vec
+(defn map-scores-to-vec []
   (mapv #(:score (first (vals %))) @core-values-state))
 
 (defn index-of [coll v]
   (let [i (count (take-while #(not= v %) coll))]
     (when (or (< i (count coll))
-            (= v (last coll)))
+              (= v (last coll)))
       i)))
 
 (defn populate-remaining-with-lowest-scores [scores]
@@ -173,34 +175,44 @@
             (if (nil? second-option)
               (set! second-option smallest-index)
               (if (nil? third-option)
-                (set! third-option smallest-index))))))
+                (set! third-option smallest-index)
+                (if (= first-option second-option third-option)
+                  (do
+                    (set! second-option 1)
+                    (set! third-option 2))))))
+          (if (nil? third-option)
+            (set! third-option 0)
+            (if (and (nil? second-option) (= third-option 0))
+              (set! second-option 1)))))
       (recur (rest remaining-scores)))))
 
 (defn test-option-history [option]
- (name (first (last (mobile-parser (-> (get @core-values-state
-                                       option)
-                                  (vals)
-                                  (first)
-                                  (:history)))))))
+  (name (first (last (mobile-parser (-> (get @core-values-state
+                                             option)
+                                        (vals)
+                                        (first)
+                                        (:history)))))))
 
 (defn initial-parsed-option-history [option]
-  (last (mobile-parser (-> (get @core-values-state
-                                option)
-                           (vals)
-                           (first)
-                           (:history)))))
+  (if-not (nil? option)
+    (last (mobile-parser (-> (get @core-values-state
+                                  option)
+                             (vals)
+                             (first)
+                             (:history))))))
 
 (defn final-parsing [parsed-option option-name]
-  (condp = (first parsed-option)
-    :R (str "Add a vision for " option-name)
-    :V (str "Add a goal for " option-name)
-    :G (str "Add a step for " option-name " goal XOYO")
-    "Failed"))
+  (if-not (nil? parsed-option)
+    (condp = (first parsed-option)
+      :R (str "Add a vision for " option-name)
+      :V (str "Add a goal for " option-name)
+      :G (str "Add a step for " option-name " goal XOYO")
+      "Failed")))
 
 (defn parse-option-history [option]
   (condp = (initial-parsed-option-history option)
-      :S (str "Add a score for " (option-name option))
-      (final-parsing (initial-parsed-option-history option) (option-name option))))
+    :S (str "Add a score for " (option-name option))
+    (final-parsing (initial-parsed-option-history option) (option-name option))))
 
 ;; Do we populate first-options with the indexes of the core values with no
 ;; scores then the smallest scores?
@@ -261,7 +273,7 @@
     :R (set! (.-location js/window) (str "#/modules/visions?current_option=" option))
     :V (set! (.-location js/window) (str "#/modules/goals?current_option=" option))
     :G (set! (.-location js/window) (str "#/modules/steps?current_option="
-  option "&current_goal=" (parsed-option-current-goal option)))
+                                         option "&current_goal=" (parsed-option-current-goal option)))
     (.log js/console "Failed!")))
 
 (defn parse-option-history-link [option]
@@ -273,8 +285,13 @@
   [:div.application
    ;; (.log js/console (pr-str mobile-parser))
    ;; (.log js/console (str "Parsed output:" (nth (get (mobile-parser "abcd") 1) 1)))
-   (populate-with-no-scores map-scores-to-vec)
-   (populate-remaining-with-lowest-scores map-scores-to-vec)
+   [:p (pr-str @core-values-state)]
+   [:p (str "First option: " first-option)]
+   [:p (str "Second option: " second-option)]
+   [:p (str "Third option: " third-option)]
+   (populate-with-no-scores (map-scores-to-vec))
+   (populate-remaining-with-lowest-scores (map-scores-to-vec))
+   ;;(populate-when-equal-scores (map-scores-to-vec))
    [:div.form-template
     [:h1 "Options"]
     [:ul
@@ -287,11 +304,11 @@
       [:label "First option"]
       [:p (parse-option-history first-option)]
       ]
-     [:li
+     [:li {:on-click #(parse-option-history-link second-option)}
       [:label "Second option"]
       [:p (parse-option-history second-option)]
       ]
-     [:li
+     [:li {:on-click #(parse-option-history-link third-option)}
       [:label "Third option"]
       [:p (parse-option-history third-option)]
       ]
