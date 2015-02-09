@@ -254,11 +254,20 @@
 ;; (set! first-option nil)
 ;; (set! second-option nil)
 
-(defn try-move-next []
-  (set! (.-location js/window) "#/introduction/seventh"))
+(def current-option nil)
 
-(def form-template
-  )
+(defn final-parsing-link [parsed-option option]
+  (condp = (first parsed-option)
+    :R (set! (.-location js/window) (str "#/modules/visions?current_option=" option))
+    :V (set! (.-location js/window) (str "#/modules/goals?current_option=" option))
+    :G (set! (.-location js/window) (str "#/modules/steps?current_option="
+  option "&current_goal=" (parsed-option-current-goal option)))
+    (.log js/console "Failed!")))
+
+(defn parse-option-history-link [option]
+  (condp = (initial-parsed-option-history option)
+    :S (set! (.-location js/window) (str "#/modules/scores?current_option=" option))
+    (final-parsing-link (initial-parsed-option-history option) option)))
 
 (defn component []
   [:div.application
@@ -269,8 +278,7 @@
    [:div.form-template
     [:h1 "Options"]
     [:ul
-     [:li {:on-click #(swap! core-values-state assoc-in [first-option (keyword
-  (option-name first-option)) :history] (str (option-history first-option) "a"))}
+     [:li {:on-click #(parse-option-history-link first-option)}
       ;; Click -> Set current option to a var -> condp on history parse for
       ;; selected option -> call set location on current option to render the
       ;; next module

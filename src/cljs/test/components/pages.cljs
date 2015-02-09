@@ -18,7 +18,8 @@
             [test.components.introduction.mood-assessment-4 :as
              mood-assessment-4]
             [test.components.introduction.mood-evaluation :as mood-evaluation]
-            [test.components.application :as application]))
+            [test.components.application :as application]
+            [test.components.modules.scores :as scores]))
 
 (defn page []
   (condp = (global-state :current-page)
@@ -37,4 +38,5 @@
     :mood-assessment-4 mood-assessment-4/component
     :mood-evaluation mood-evaluation/component
     :application application/component
+    :scores scores/component
     ))
