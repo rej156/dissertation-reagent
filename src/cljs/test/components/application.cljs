@@ -127,7 +127,6 @@
       (first)
       (:history)))
 
-
 ;;recursively iterate, if first-option isn't nil, set it as the first
 ;;core-value that has a nil score or the lowest score
 
@@ -217,7 +216,8 @@
 ;; the user BUT WITH A RE-RENDER AND PARSING ON EACH USER ACTION
 ;; Intermittently, the user is presented to work on the lowest scores at all times.
 ;; 2) In these cases, the possible states of action would be...
-;; - [ ] Scoring core value -> Add a "a" string to its (:history (first (vals current)))
+;; - [ ] Scoring core value -> Add a "a" string to its (:history (first (vals
+;; current))) -> Set current option var back to nil
 ;; **** DO WE UPDATE THE PARSER TO ACCEPT zero or more so it can present the
 ;; correct key of the required state? i.e. A score without a goal can still be parsed.
 ;; ****
@@ -258,15 +258,15 @@
 
 (defn final-parsing-link [parsed-option option]
   (condp = (first parsed-option)
-    :R (set! (.-location js/window) (str "#/modules/visions?current-option=" option))
-    :V (set! (.-location js/window) (str "#/modules/goals?current-option=" option))
-    :G (set! (.-location js/window) (str "#/modules/steps?current-option="
+    :R (set! (.-location js/window) (str "#/modules/visions?current_option=" option))
+    :V (set! (.-location js/window) (str "#/modules/goals?current_option=" option))
+    :G (set! (.-location js/window) (str "#/modules/steps?current_option="
   option "&current_goal=" (parsed-option-current-goal option)))
     (.log js/console "Failed!")))
 
 (defn parse-option-history-link [option]
   (condp = (initial-parsed-option-history option)
-    :S (set! (.-location js/window) (str "#/modules/scores?current-option=" option))
+    :S (set! (.-location js/window) (str "#/modules/scores?current_option=" option))
     (final-parsing-link (initial-parsed-option-history option) option)))
 
 (defn component []

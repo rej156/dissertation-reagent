@@ -69,7 +69,7 @@
 
   (defroute "/modules/scores" [query-params]
     (.log js/console (pr-str "The query params are: " query-params))
-    (set! application/current-option (:current-option query-params))
+    (set! application/current-option (js/parseInt (:current_option query-params)))
     (global-put! :current-page :scores))
 
   (hook-browser-navigation!))

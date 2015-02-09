@@ -1,12 +1,31 @@
-;; (swap! core-values-state assoc-in [first-option (keyword
-;;   (option-name first-option)) :history] (str (option-history first-option) "a"))
 (ns test.components.modules.scores
   (:require [reagent-forms.core :refer [bind-fields]]
             [test.session :as session :refer [prefs prefs-state]]
             [test.components.application :as application]))
 
+(defn try-move-next []
+  (set! application/current-option nil)
+  (swap! application/core-values-state assoc-in [application/current-option (keyword
+                                                                             (application/option-name
+                                                                              application/current-option)) :history] "a")
+  (set! (.-location js/window) "#/application"))
+
 (defn component []
   [:div.scores
    [:h1 (str "The current option is: " application/current-option)]
    [:h2 (str "The option name is: " (application/option-name application/current-option))]
-   [:p "Rendered!"]])
+   [:p "Rendered!"]
+   [:div.form-template
+    [:h3 (str "How would you rate your satisfaction in the "
+              application/option-name " area of your life?")]
+    [:input.form-control {:type "number"
+                          :min 0
+                          :max 7
+                          :on-change #(swap! application/core-values-state assoc-in [current-option (keyword
+                                                                                                     (option-name current-option)) :score] (.. % -target -value))
+                          }]]
+   [:button {:on-click #(try-move-next)}]])
+
+;; Update history with string at the end
+;; (swap! core-values-state assoc-in [first-option (keyword
+;;   (option-name first-option)) :history] (str (option-history first-option) "a"))
