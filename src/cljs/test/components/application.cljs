@@ -258,15 +258,15 @@
 
 (defn final-parsing-link [parsed-option option]
   (condp = (first parsed-option)
-    :R (set! (.-location js/window) (str "#/modules/visions?current_option=" option))
-    :V (set! (.-location js/window) (str "#/modules/goals?current_option=" option))
-    :G (set! (.-location js/window) (str "#/modules/steps?current_option="
+    :R (set! (.-location js/window) (str "#/modules/visions?current-option=" option))
+    :V (set! (.-location js/window) (str "#/modules/goals?current-option=" option))
+    :G (set! (.-location js/window) (str "#/modules/steps?current-option="
   option "&current_goal=" (parsed-option-current-goal option)))
     (.log js/console "Failed!")))
 
 (defn parse-option-history-link [option]
   (condp = (initial-parsed-option-history option)
-    :S (set! (.-location js/window) (str "#/modules/scores?current_option=" option))
+    :S (set! (.-location js/window) (str "#/modules/scores?current-option=" option))
     (final-parsing-link (initial-parsed-option-history option) option)))
 
 (defn component []

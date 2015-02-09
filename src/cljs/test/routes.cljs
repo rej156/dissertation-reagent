@@ -3,7 +3,8 @@
             [test.session :refer [global-put!]]
             [test.components.pages :refer [page]]
             [goog.events :as events]
-            [goog.history.EventType :as EventType])
+            [goog.history.EventType :as EventType]
+            [test.components.application :as application])
   (:import goog.History))
 
 ;; ----------
@@ -68,6 +69,7 @@
 
   (defroute "/modules/scores" [query-params]
     (.log js/console (pr-str "The query params are: " query-params))
+    (set! application/current-option (:current-option query-params))
     (global-put! :current-page :scores))
 
   (hook-browser-navigation!))
