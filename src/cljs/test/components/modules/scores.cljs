@@ -7,10 +7,7 @@
   (swap! application/core-values-state assoc-in [application/current-option (keyword
                                                                  (application/option-name application/current-option)) :history] "a")
   (set! (.-location js/window) "#/application")
-  (set! application/current-option nil)
-  (set! application/first-option nil)
-  (set! application/second-option nil)
-  (set! application/third-option nil))
+  (application/reset-vars!))
 
 (defn component []
   [:div.scores

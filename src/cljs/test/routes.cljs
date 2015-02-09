@@ -72,4 +72,9 @@
     (set! application/current-option (js/parseInt (:current_option query-params)))
     (global-put! :current-page :scores))
 
+  (defroute "/modules/visions" [query-params]
+    (.log js/console (pr-str "The query params are: " query-params))
+    (set! application/current-option (js/parseInt (:current_option query-params)))
+    (global-put! :current-page :visions))
+
   (hook-browser-navigation!))

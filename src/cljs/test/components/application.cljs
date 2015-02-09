@@ -268,6 +268,12 @@
 
 (def current-option nil)
 
+(defn reset-vars! []
+  (set! current-option nil)
+  (set! first-option nil)
+  (set! second-option nil)
+  (set! third-option nil))
+
 (defn final-parsing-link [parsed-option option]
   (condp = (first parsed-option)
     :R (set! (.-location js/window) (str "#/modules/visions?current_option=" option))
@@ -294,13 +300,8 @@
    ;;(populate-when-equal-scores (map-scores-to-vec))
    [:div.form-template
     [:h1 "Options"]
-    [:ul
+    [:ol
      [:li {:on-click #(parse-option-history-link first-option)}
-      ;; Click -> Set current option to a var -> condp on history parse for
-      ;; selected option -> call set location on current option to render the
-      ;; next module
-      ;; Next module reads from current option var and modifies its history
-      ;; state string after
       [:label "First option"]
       [:p (parse-option-history first-option)]
       ]
