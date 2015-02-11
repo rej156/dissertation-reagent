@@ -287,6 +287,16 @@
     :S (set! (.-location js/window) (str "#/modules/scores?current_option=" option))
     (final-parsing-link (initial-parsed-option-history option) option)))
 
+(defn setup-visions []
+  (loop [current @core-values-state
+         counter 0]
+    (when (not-empty current)
+      (swap! core-values-state assoc-in [counter (first (keys (first current)))
+  :history] "a")
+      (swap! core-values-state assoc-in [counter (first (keys (first current)))
+  :score] 5)
+      (recur (rest current) (inc counter)))))
+
 (defn component []
   [:div.application
    ;; (.log js/console (pr-str mobile-parser))
