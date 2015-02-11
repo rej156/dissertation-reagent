@@ -18,10 +18,11 @@
                                         :current-goal-name ""
                                         :current-step ""
                                         :goals [
-                                                {:name ""
-                                                 :description ""
-                                                 :steps ["",""]
-                                                 }]
+                                                ;; {:name ""
+                                                ;;  :description ""
+                                                ;;  :steps ["",""]
+                                                ;;  }
+                                                ]
                                         }
                                }
                               {:finances {:history ""
@@ -30,10 +31,11 @@
                                           :current-goal-name ""
                                           :current-step ""
                                           :goals [
-                                                  {:name ""
-                                                   :description ""
-                                                   :steps ["",""]
-                                                   }]
+                                                  ;; {:name ""
+                                                  ;;  :description ""
+                                                  ;;  :steps ["",""]
+                                                  ;;  }
+                                                  ]
                                           }
                                }
                               {:health {:history ""
@@ -42,10 +44,11 @@
                                         :current-goal-name ""
                                         :current-step ""
                                         :goals [
-                                                {:name ""
-                                                 :description ""
-                                                 :steps ["",""]
-                                                 }]
+                                                ;; {:name ""
+                                                ;;  :description ""
+                                                ;;  :steps ["",""]
+                                                ;;  }
+                                                ]
                                         }
                                }
                               {:family {:history ""
@@ -54,10 +57,11 @@
                                         :current-goal-name ""
                                         :current-step ""
                                         :goals [
-                                                {:name ""
-                                                 :description ""
-                                                 :steps ["",""]
-                                                 }]
+                                                ;; {:name ""
+                                                ;;  :description ""
+                                                ;;  :steps ["",""]
+                                                ;;  }
+                                                ]
                                         }
                                }
                               {:romance {:history ""
@@ -66,10 +70,11 @@
                                          :current-goal-name ""
                                          :current-step ""
                                          :goals [
-                                                 {:name ""
-                                                  :description ""
-                                                  :steps ["",""]
-                                                  }]
+                                                 ;; {:name ""
+                                                 ;;  :description ""
+                                                 ;;  :steps ["",""]
+                                                 ;;  }
+                                                 ]
                                          }
                                }
                               {:personal-growth {:history ""
@@ -78,10 +83,11 @@
                                                  :current-goal-name ""
                                                  :current-step ""
                                                  :goals [
-                                                         {:name ""
-                                                          :description ""
-                                                          :steps ["",""]
-                                                          }]
+                                                         ;; {:name ""
+                                                         ;;  :description ""
+                                                         ;;  :steps ["",""]
+                                                         ;;  }
+                                                         ]
                                                  }
                                }
                               {:fun {:history ""
@@ -90,10 +96,11 @@
                                      :current-goal-name ""
                                      :current-step ""
                                      :goals [
-                                             {:name ""
-                                              :description ""
-                                              :steps ["",""]
-                                              }]
+                                             ;; {:name ""
+                                             ;;  :description ""
+                                             ;;  :steps ["",""]
+                                             ;;  }
+                                             ]
                                      }
                                }
                               {:physical-environment {:history ""
@@ -102,10 +109,11 @@
                                                       :current-goal-name ""
                                                       :current-step ""
                                                       :goals [
-                                                              {:name ""
-                                                               :description ""
-                                                               :steps ["",""]
-                                                               }]
+                                                              ;; {:name ""
+                                                              ;;  :description ""
+                                                              ;;  :steps ["",""]
+                                                              ;;  }
+                                                              ]
                                                       }
                                }
                               ]))
@@ -128,6 +136,13 @@
         (vals)
         (first)
         (:history))))
+
+(defn option-goals [option]
+  (if-not (nil? option)
+    (-> (get @core-values-state option)
+        (vals)
+        (first)
+        (:goals))))
 
 ;;recursively iterate, if first-option isn't nil, set it as the first
 ;;core-value that has a nil score or the lowest score
@@ -185,13 +200,6 @@
             (if (and (nil? second-option) (= third-option 0))
               (set! second-option 1)))))
       (recur (rest remaining-scores)))))
-
-(defn test-option-history [option]
-  (name (first (last (mobile-parser (-> (get @core-values-state
-                                             option)
-                                        (vals)
-                                        (first)
-                                        (:history)))))))
 
 (defn initial-parsed-option-history [option]
   (if-not (nil? option)
@@ -274,10 +282,16 @@
   (set! second-option nil)
   (set! third-option nil))
 
+(defn option-existing-goals [option]
+  (if (empty? (option-goals option))
+    0
+    1))
+
 (defn final-parsing-link [parsed-option option]
   (condp = (first parsed-option)
     :R (set! (.-location js/window) (str "#/modules/visions?current_option=" option))
-    :V (set! (.-location js/window) (str "#/modules/goals?current_option=" option))
+    :V (set! (.-location js/window) (str "#/modules/goals?current_option="
+  option "&existing_goals=" (option-existing-goals option)))
     :G (set! (.-location js/window) (str "#/modules/steps?current_option="
                                          option "&current_goal=" (parsed-option-current-goal option)))
     (.log js/console "Failed!")))
