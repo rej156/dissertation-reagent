@@ -12,62 +12,95 @@
 
 
 (defonce core-values-state (atom [
-                              {:career {:history ""
-                                        :score nil
-                                        :vision ""
-                                        :current-goal-name ""
-                                        :current-step ""
-                                        :goals [
-                                                ;; {:name ""
-                                                ;;  :description ""
-                                                ;;  :steps ["",""]
-                                                ;;  }
-                                                ]
-                                        }
-                               }
-                              {:finances {:history ""
-                                          :score nil
-                                          :vision ""
-                                          :current-goal-name ""
-                                          :current-step ""
-                                          :goals [
-                                                  ;; {:name ""
-                                                  ;;  :description ""
-                                                  ;;  :steps ["",""]
-                                                  ;;  }
-                                                  ]
-                                          }
-                               }
-                              {:health {:history ""
-                                        :score nil
-                                        :vision ""
-                                        :current-goal-name ""
-                                        :current-step ""
-                                        :goals [
-                                                ;; {:name ""
-                                                ;;  :description ""
-                                                ;;  :steps ["",""]
-                                                ;;  }
-                                                ]
-                                        }
-                               }
-                              {:family {:history ""
-                                        :score nil
-                                        :vision ""
-                                        :current-goal-name ""
-                                        :current-step ""
-                                        :goals [
-                                                ;; {:name ""
-                                                ;;  :description ""
-                                                ;;  :steps ["",""]
-                                                ;;  }
-                                                ]
-                                        }
-                               }
-                              {:romance {:history ""
+                                  {:career {:history ""
+                                            :score nil
+                                            :vision ""
+                                            :current-goal-name ""
+                                            :current-goal nil
+                                            :current-step ""
+                                            :goals [
+                                                    ;; {:name ""
+                                                    ;;  :description ""
+                                                    ;;  :steps ["",""]
+                                                    ;;  }
+                                                    ]
+                                            }
+                                   }
+                                  {:finances {:history ""
+                                              :score nil
+                                              :vision ""
+                                              :current-goal-name ""
+                                              :current-goal nil
+                                              :current-step ""
+                                              :goals [
+                                                      ;; {:name ""
+                                                      ;;  :description ""
+                                                      ;;  :steps ["",""]
+                                                      ;;  }
+                                                      ]
+                                              }
+                                   }
+                                  {:health {:history ""
+                                            :score nil
+                                            :vision ""
+                                            :current-goal-name ""
+                                            :current-goal nil
+                                            :current-step ""
+                                            :goals [
+                                                    ;; {:name ""
+                                                    ;;  :description ""
+                                                    ;;  :steps ["",""]
+                                                    ;;  }
+                                                    ]
+                                            }
+                                   }
+                                  {:family {:history ""
+                                            :score nil
+                                            :vision ""
+                                            :current-goal-name ""
+                                            :current-goal nil
+                                            :current-step ""
+                                            :goals [
+                                                    ;; {:name ""
+                                                    ;;  :description ""
+                                                    ;;  :steps ["",""]
+                                                    ;;  }
+                                                    ]
+                                            }
+                                   }
+                                  {:romance {:history ""
+                                             :score nil
+                                             :vision ""
+                                             :current-goal-name ""
+                                             :current-goal nil
+                                             :current-step ""
+                                             :goals [
+                                                     ;; {:name ""
+                                                     ;;  :description ""
+                                                     ;;  :steps ["",""]
+                                                     ;;  }
+                                                     ]
+                                             }
+                                   }
+                                  {:personal-growth {:history ""
+                                                     :score nil
+                                                     :vision ""
+                                                     :current-goal-name ""
+                                                     :current-goal nil
+                                                     :current-step ""
+                                                     :goals [
+                                                             ;; {:name ""
+                                                             ;;  :description ""
+                                                             ;;  :steps ["",""]
+                                                             ;;  }
+                                                             ]
+                                                     }
+                                   }
+                                  {:fun {:history ""
                                          :score nil
                                          :vision ""
                                          :current-goal-name ""
+                                         :current-goal nil
                                          :current-step ""
                                          :goals [
                                                  ;; {:name ""
@@ -76,47 +109,22 @@
                                                  ;;  }
                                                  ]
                                          }
-                               }
-                              {:personal-growth {:history ""
-                                                 :score nil
-                                                 :vision ""
-                                                 :current-goal-name ""
-                                                 :current-step ""
-                                                 :goals [
-                                                         ;; {:name ""
-                                                         ;;  :description ""
-                                                         ;;  :steps ["",""]
-                                                         ;;  }
-                                                         ]
-                                                 }
-                               }
-                              {:fun {:history ""
-                                     :score nil
-                                     :vision ""
-                                     :current-goal-name ""
-                                     :current-step ""
-                                     :goals [
-                                             ;; {:name ""
-                                             ;;  :description ""
-                                             ;;  :steps ["",""]
-                                             ;;  }
-                                             ]
-                                     }
-                               }
-                              {:physical-environment {:history ""
-                                                      :score nil
-                                                      :vision ""
-                                                      :current-goal-name ""
-                                                      :current-step ""
-                                                      :goals [
-                                                              ;; {:name ""
-                                                              ;;  :description ""
-                                                              ;;  :steps ["",""]
-                                                              ;;  }
-                                                              ]
-                                                      }
-                               }
-                              ]))
+                                   }
+                                  {:physical-environment {:history ""
+                                                          :score nil
+                                                          :vision ""
+                                                          :current-goal-name ""
+                                                          :current-goal nil
+                                                          :current-step ""
+                                                          :goals [
+                                                                  ;; {:name ""
+                                                                  ;;  :description ""
+                                                                  ;;  :steps ["",""]
+                                                                  ;;  }
+                                                                  ]
+                                                          }
+                                   }
+                                  ]))
 
 
 (def first-option nil)
@@ -291,7 +299,7 @@
   (condp = (first parsed-option)
     :R (set! (.-location js/window) (str "#/modules/visions?current_option=" option))
     :V (set! (.-location js/window) (str "#/modules/goals?current_option="
-  option "&existing_goals=" (option-existing-goals option)))
+                                         option "&existing_goals=" (option-existing-goals option)))
     :G (set! (.-location js/window) (str "#/modules/steps?current_option="
                                          option "&current_goal=" (parsed-option-current-goal option)))
     (.log js/console "Failed!")))
@@ -306,9 +314,9 @@
          counter 0]
     (when (not-empty current)
       (swap! core-values-state assoc-in [counter (first (keys (first current)))
-  :history] "a")
+                                         :history] "a")
       (swap! core-values-state assoc-in [counter (first (keys (first current)))
-  :score] 5)
+                                         :score] 5)
       (recur (rest current) (inc counter)))))
 
 (defn component []
