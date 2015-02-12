@@ -319,6 +319,18 @@
                                          :score] 5)
       (recur (rest current) (inc counter)))))
 
+(defn setup-goals []
+  (swap! core-values-state assoc-in [0 :career :score] 5)
+  (swap! core-values-state assoc-in [0 :career :history] "abc")
+  (swap! core-values-state assoc-in [0 :career :goals] [{:name "Tits
+  everywhere"
+                                                         :description "Lick
+  them titties"},
+                                                        {:name "lol
+  everywhere"
+                                                         :description "huh
+  them titties"}]))
+
 (defn component []
   [:div.application
    ;; (.log js/console (pr-str mobile-parser))

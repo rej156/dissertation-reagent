@@ -7,7 +7,7 @@
 
 (def existing-goals nil)
 
-(defn goal-atom []
+(def goal-atom
   (atom {:name ""
          :description ""
          :steps []
@@ -25,9 +25,9 @@
          [application/current-option (keyword (application/option-name
                                                application/current-option))  :history]
          (str (-> (get @application/core-values-state application/current-option)
-                   (vals)
-                   (first)
-                   (:history)) "c")))
+                  (vals)
+                  (first)
+                  (:history)) "c")))
 
 (defn commit-goal []
   (swap! application/core-values-state assoc-in
@@ -48,18 +48,15 @@
          [application/current-option (keyword (application/option-name
                                                application/current-option))
           :current-goal-name] (-> (get (-> (get @application/core-values-state
-                                       application/current-option)
-                                  (vals)
-                                  (first)
-                                  (:goals)) option)
-                                  (:name))))
+                                                application/current-option)
+                                           (vals)
+                                           (first)
+                                           (:goals)) option)
+                                  (:name)))
+  (set! (.-location js/window) "#/application"))
 
 (defn reset-goal-atom []
-  (reset! goal-atom {:name ""
-                     :description ""
-                     :steps []
-                     }))
-
+  (reset! goal-atom {}))
 
 (defn try-move-next [option]
   (condp = option
@@ -71,34 +68,40 @@
                (application/reset-vars!))
     "add another" (do
                     (save-goal)
-                    (reset-goal-atom))
+                    (reset-goal-atom)
+(set! (.-location js/window) (str
+                                                  "#/modules/goals?current_option=" application/current-option
+                                                  "&existing_goals=1"))
+(set! (.-location js/window) (str
+                                                  "#/modules/goals?current_option=" application/current-option
+                                                  "&existing_goals=0")))
     "save" (do
              (save-goal)
              (reset-goal-atom)
              (set! (.-location js/window) "#/application")
-             (application/reset-vars!))
-    ))
+             (application/reset-vars!))))
 
 (defn add-a-goal-component []
   [:div.goals
-   [:h3 "To get closer to your vision: "]
-   [:br]
-   [:h4 (str (-> (get @application/core-values-state
+   [:h2 "To get closer to your vision: "]
+   [:h3 (str (-> (get @application/core-values-state
                       application/current-option)
                  (vals)
                  (first)
                  (:vision)))]
-   [:h4 (str "Write down an achievable goal that'll get your closer to your ideal
-  future in your " (application/option-name application/current-option))]
+   [:br]
+   [:h4 "Choose a goal to commit to and get closer to it!"]
    [:label "Goal name"]
    [:input.form-control {:type "text"
                          :on-change #(swap! goal-atom assoc :name (.. % -target
                                                                       -value))}]
    [:label "Goal description"]
+   [:br]
    [:textarea {:rows 4
                :cols 50
                :on-change #(swap! goal-atom assoc :description (.. % -target
                                                                    -value))}]
+   [:br]
    [:button {:on-click #(try-move-next "commit")} "Commit to it now"]
    [:button {:on-click #(try-move-next "add another")} "Add another goal"]
    [:button {:on-click #(try-move-next "save")} "Save for now"]
@@ -106,27 +109,28 @@
 
 (defn commit-a-goal-component []
   [:div.commit-a-goal
-   [:h3 "To get closer to your vision: "]
-   [:br]
-   [:h4 (str (-> (get @application/core-values-state
+   [:h2 "To get closer to your vision: "]
+   [:h3 (str (-> (get @application/core-values-state
                       application/current-option)
                  (vals)
                  (first)
                  (:vision)))]
-
-   [:h3 "Choose a goal to commit to and get closer to it!"]
-   [:ol.list-group
+   [:br]
+   [:h4 "Choose a goal to commit to and get closer to it!"]
+   [:ol
     (for [goal (-> (get @application/core-values-state
-                      application/current-option)
-                 (vals)
-                 (first)
-                 (:goals))]
-      (let [current 0]
-        [:li.list-group-item {:key goal
-                              :on-click #(commit-goal-option current)}
-         [:h5 (str (:name goal))]
-         [:p (str "-> " (:description goal))]]
-        (inc current)))]])
+                        application/current-option)
+                   (vals)
+                   (first)
+                   (:goals))]
+      [:li {:key (:name goal)
+            :on-click #(commit-goal-option (application/index-of (-> (get @application/core-values-state
+                                                                          application/current-option)
+                                                                     (vals)
+                                                                     (first)
+                                                                     (:goals)) goal))}
+       [:p (:name goal)]
+       [:p (:description goal)]])]])
 
 (defn goals-component [existing-goals]
   (if (= existing-goals 0)

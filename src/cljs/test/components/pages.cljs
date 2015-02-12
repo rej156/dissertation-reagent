@@ -42,6 +42,4 @@
     :application application/component
     :scores scores/component
     :visions visions/component
-    :goals goals/component
-    :steps steps/component
-    ))
+    :goals goals/component))
