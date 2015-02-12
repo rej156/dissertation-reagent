@@ -1,4 +1,4 @@
-(ns test.components.application
+(ns test.components.modules.goals
   (:require [test.session :refer [global-put! global-state prefs-state prefs merge-atoms]]
             [reagent.core :as reagent :refer [atom]]
             [secretary.core :as secretary]
@@ -20,7 +20,14 @@
          (conj (-> (get @application/core-values-state application/current-option)
                    (vals)
                    (first)
-                   (:goals)) @goal-atom)))
+                   (:goals)) @goal-atom))
+  (swap! application/core-values-state assoc-in
+         [application/current-option (keyword (application/option-name
+                                               application/current-option))  :history]
+         (str (-> (get @application/core-values-state application/current-option)
+                   (vals)
+                   (first)
+                   (:history)) "c")))
 
 (defn commit-goal []
   (swap! application/core-values-state assoc-in
@@ -32,6 +39,20 @@
   (swap! application/core-values-state assoc-in
          [application/current-option (keyword (application/option-name
                                                application/current-option)) :current-goal-name] (:name @goal-atom)))
+
+(defn commit-goal-option [option]
+  (swap! application/core-values-state assoc-in
+         [application/current-option (keyword (application/option-name
+                                               application/current-option)) :current-goal] option)
+  (swap! application/core-values-state assoc-in
+         [application/current-option (keyword (application/option-name
+                                               application/current-option))
+          :current-goal-name] (-> (get (-> (get @application/core-values-state
+                                       application/current-option)
+                                  (vals)
+                                  (first)
+                                  (:goals)) option)
+                                  (:name))))
 
 (defn reset-goal-atom []
   (reset! goal-atom {:name ""
@@ -83,10 +104,34 @@
    [:button {:on-click #(try-move-next "save")} "Save for now"]
    ])
 
+(defn commit-a-goal-component []
+  [:div.commit-a-goal
+   [:h3 "To get closer to your vision: "]
+   [:br]
+   [:h4 (str (-> (get @application/core-values-state
+                      application/current-option)
+                 (vals)
+                 (first)
+                 (:vision)))]
+
+   [:h3 "Choose a goal to commit to and get closer to it!"]
+   [:ol.list-group
+    (for [goal (-> (get @application/core-values-state
+                      application/current-option)
+                 (vals)
+                 (first)
+                 (:goals))]
+      (let [current 0]
+        [:li.list-group-item {:key goal
+                              :on-click #(commit-goal-option current)}
+         [:h5 (str (:name goal))]
+         [:p (str "-> " (:description goal))]]
+        (inc current)))]])
+
 (defn goals-component [existing-goals]
   (if (= existing-goals 0)
     (add-a-goal-component)
-    ))
+    (commit-a-goal-component)))
 
 (defn component []
   (goals-component existing-goals))
