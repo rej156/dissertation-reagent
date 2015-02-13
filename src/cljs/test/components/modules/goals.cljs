@@ -69,12 +69,8 @@
     "add another" (do
                     (save-goal)
                     (reset-goal-atom)
-(set! (.-location js/window) (str
-                                                  "#/modules/goals?current_option=" application/current-option
-                                                  "&existing_goals=1"))
-(set! (.-location js/window) (str
-                                                  "#/modules/goals?current_option=" application/current-option
-                                                  "&existing_goals=0")))
+                    (set! (.-location js/window) (str
+                                                  "#/modules/another-goal?current_option=" application/current-option)))
     "save" (do
              (save-goal)
              (reset-goal-atom)

@@ -78,10 +78,15 @@
     (set! application/current-option (js/parseInt (:current_option query-params)))
     (global-put! :current-page :visions))
 
-(defroute "/modules/goals" [query-params]
+  (defroute "/modules/goals" [query-params]
     (.log js/console (pr-str "The query params are: " query-params))
     (set! application/current-option (js/parseInt (:current_option query-params)))
     (set! goals/existing-goals (js/parseInt (:existing_goals query-params)))
     (global-put! :current-page :goals))
+
+  (defroute "/modules/another-goal" [query-params]
+    (.log js/console (pr-str "The query params are: " query-params))
+    (set! application/current-option (js/parseInt (:current_option query-params)))
+    (global-put! :current-page :another-goal))
 
   (hook-browser-navigation!))
