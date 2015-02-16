@@ -157,10 +157,10 @@
 
 (def mobile-parser
   (insta/parser
-   "S = R* V* (G+)*
+   "S = R* V* G*
     R = 'a'
     V = 'b'
-    G = g s+
+    G = g* s*
     g = 'c'
     s = 'd'"))
 
@@ -217,18 +217,46 @@
                              (first)
                              (:history))))))
 
-(defn final-parsing [parsed-option option-name]
+(defn final-final-parsing [option-name option]
+  (if (nil? (-> (get @core-values-state option)
+               (vals)
+               (first)
+               (:current-goal)))
+    (str "Add or commit to a goal")
+    (if (empty? (-> (get @core-values-state option)
+                (vals)
+                (first)
+                (:current-step)))
+    (str "Add a step for " option-name " goal '" (-> (get @core-values-state
+                                                         option)
+                                                    (vals)
+                                                    (first)
+                                                    (:current-goal-name)) "'")
+    (str "Confirm completion of the step " (-> (get @core-values-state option)
+                                               (vals)
+                                               (first)
+                                               (:current-step))
+         " for goal " (-> (get @core-values-state
+                               option)
+                          (vals)
+                          (first)
+                          (:current-goal))))))
+    ;; Take me to the existing_goals = 1 page but add a link to add another
+    ;; goal page
+
+
+(defn final-parsing [parsed-option option-name option]
   (if-not (nil? parsed-option)
     (condp = (first parsed-option)
       :R (str "Add a vision for " option-name)
       :V (str "Add a goal for " option-name)
-      :G (str "Add a step for " option-name " goal XOYO")
+      :G (final-final-parsing option-name option)
       "Failed")))
 
 (defn parse-option-history [option]
   (condp = (initial-parsed-option-history option)
     :S (str "Add a score for " (option-name option))
-    (final-parsing (initial-parsed-option-history option) (option-name option))))
+    (final-parsing (initial-parsed-option-history option) (option-name option) option)))
 
 ;; Do we populate first-options with the indexes of the core values with no
 ;; scores then the smallest scores?
@@ -295,13 +323,29 @@
     0
     1))
 
+(defn final-final-parsing-link [option]
+  (if (nil? (-> (get @core-values-state option)
+               (vals)
+               (first)
+               (:current-goal)))
+    (set! (.-location js/window) (str "#/modules/goals?current_option="
+                                      option "&existing_goals=1"))
+    (if (empty? (-> (get @core-values-state option)
+                    (vals)
+                    (first)
+                    (:current-step)))
+      (set! (.-location js/window) (str "#/modules/steps?current_option="
+                                        option "&existing_step=0"))
+      (set! (.-location js/window) (str "#/modules/steps?current_option="
+                                        option "&existing_step=1")))))
+
+
 (defn final-parsing-link [parsed-option option]
   (condp = (first parsed-option)
     :R (set! (.-location js/window) (str "#/modules/visions?current_option=" option))
     :V (set! (.-location js/window) (str "#/modules/goals?current_option="
                                          option "&existing_goals=" (option-existing-goals option)))
-    :G (set! (.-location js/window) (str "#/modules/steps?current_option="
-                                         option "&current_goal=" (parsed-option-current-goal option)))
+    :G (final-final-parsing-link option)
     (.log js/console "Failed!")))
 
 (defn parse-option-history-link [option]

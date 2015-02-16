@@ -112,6 +112,10 @@
                  (first)
                  (:vision)))]
    [:br]
+   [:button {:on-click #(set! (.-location js/window) (str
+  "#/modules/another-goal?current_option=" application/current-option))} "Add
+  another goal"]
+   [:h4 "or"]
    [:h4 "Choose a goal to commit to and get closer to it!"]
    [:ol
     (for [goal (-> (get @application/core-values-state
