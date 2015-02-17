@@ -187,12 +187,16 @@
               (= v (last coll)))
       i)))
 
+(defn duplicates? [xs]
+  (not= (count (distinct xs)) (count xs)))
+
 (defn populate-remaining-with-lowest-scores [scores]
-  (loop [remaining-scores scores]
+  (loop [remaining-scores scores
+         current-index 0]
     (when (not-empty remaining-scores)
       (let [smallest-index (index-of remaining-scores (apply min remaining-scores))
-            current-score (apply min remaining-scores)]
-        (if-not (nil? current-score)
+            current-smallest-score (apply min remaining-scores)]
+        (if-not (nil? current-smallest-score)
           (if (nil? first-option)
             (set! first-option smallest-index)
             (if (nil? second-option)
@@ -206,8 +210,10 @@
           (if (nil? third-option)
             (set! third-option 0)
             (if (and (nil? second-option) (= third-option 0))
-              (set! second-option 1)))))
-      (recur (rest remaining-scores)))))
+              (set! second-option 1)
+              (if (nil? first-option)
+                (set! first-option 2))))))
+      (recur (rest remaining-scores) (inc current-index)))))
 
 (defn initial-parsed-option-history [option]
   (if-not (nil? option)
@@ -219,30 +225,30 @@
 
 (defn final-final-parsing [option-name option]
   (if (nil? (-> (get @core-values-state option)
-               (vals)
-               (first)
-               (:current-goal)))
-    (str "Add or commit to a goal")
-    (if (empty? (-> (get @core-values-state option)
                 (vals)
                 (first)
-                (:current-step)))
-    (str "Add a step for " option-name " goal '" (-> (get @core-values-state
-                                                         option)
-                                                    (vals)
-                                                    (first)
-                                                    (:current-goal-name)) "'")
-    (str "Confirm completion of the step " (-> (get @core-values-state option)
-                                               (vals)
-                                               (first)
-                                               (:current-step))
-         " for goal " (-> (get @core-values-state
-                               option)
-                          (vals)
-                          (first)
-                          (:current-goal))))))
-    ;; Take me to the existing_goals = 1 page but add a link to add another
-    ;; goal page
+                (:current-goal)))
+    (str "Add or commit to a goal for " option-name)
+    (if (empty? (-> (get @core-values-state option)
+                    (vals)
+                    (first)
+                    (:current-step)))
+      (str "Add a step for " option-name " goal '" (-> (get @core-values-state
+                                                            option)
+                                                       (vals)
+                                                       (first)
+                                                       (:current-goal-name)) "'")
+      (str "Confirm completion of the step " (-> (get @core-values-state option)
+                                                 (vals)
+                                                 (first)
+                                                 (:current-step))
+           " for goal " (-> (get @core-values-state
+                                 option)
+                            (vals)
+                            (first)
+                            (:current-goal-name))))))
+;; Take me to the existing_goals = 1 page but add a link to add another
+;; goal page
 
 
 (defn final-parsing [parsed-option option-name option]
@@ -325,9 +331,9 @@
 
 (defn final-final-parsing-link [option]
   (if (nil? (-> (get @core-values-state option)
-               (vals)
-               (first)
-               (:current-goal)))
+                (vals)
+                (first)
+                (:current-goal)))
     (set! (.-location js/window) (str "#/modules/goals?current_option="
                                       option "&existing_goals=1"))
     (if (empty? (-> (get @core-values-state option)
@@ -374,6 +380,14 @@
   everywhere"
                                                          :description "huh
   them titties"}]))
+
+(defn setup-steps []
+  (setup-visions)
+  (setup-goals)
+  (swap! core-values-state assoc-in [0 :career :vision] "I want to be like Dan Bilzerian.")
+  (swap! core-values-state assoc-in [0 :career :current-goal-name] "Tits
+  everywhere")
+  (swap! core-values-state assoc-in [0 :career :current-goal] 0))
 
 (defn component []
   [:div.application

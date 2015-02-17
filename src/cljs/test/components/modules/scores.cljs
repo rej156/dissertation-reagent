@@ -4,8 +4,13 @@
             [test.components.application :as application]))
 
 (defn try-move-next []
-  (swap! application/core-values-state assoc-in [application/current-option (keyword
-                                                                 (application/option-name application/current-option)) :history] "a")
+  (if-not (> (count (-> (get @application/core-values-state
+                         application/current-option)
+                    (vals)
+                    (first)
+                    (:history))) 1)
+    (swap! application/core-values-state assoc-in [application/current-option (keyword
+                                                                               (application/option-name application/current-option)) :history] "a"))
   (set! (.-location js/window) "#/application")
   (application/reset-vars!))
 

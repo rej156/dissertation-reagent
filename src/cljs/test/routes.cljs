@@ -5,7 +5,8 @@
             [goog.events :as events]
             [goog.history.EventType :as EventType]
             [test.components.application :as application]
-            [test.components.modules.goals :as goals])
+            [test.components.modules.goals :as goals]
+            [test.components.modules.steps :as steps])
   (:import goog.History))
 
 ;; ----------
@@ -88,5 +89,16 @@
     (.log js/console (pr-str "The query params are: " query-params))
     (set! application/current-option (js/parseInt (:current_option query-params)))
     (global-put! :current-page :another-goal))
+
+  (defroute "/modules/steps" [query-params]
+    (.log js/console (pr-str "The query params are: " query-params))
+    (set! application/current-option (js/parseInt (:current_option query-params)))
+    (set! steps/existing-step (js/parseInt (:existing_step query-params)))
+    (global-put! :current-page :steps))
+
+(defroute "/modules/another-step" [query-params]
+    (.log js/console (pr-str "The query params are: " query-params))
+    (set! application/current-option (js/parseInt (:current_option query-params)))
+    (global-put! :current-page :another-step))
 
   (hook-browser-navigation!))

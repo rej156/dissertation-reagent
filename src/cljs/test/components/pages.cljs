@@ -22,7 +22,9 @@
             [test.components.modules.scores :as scores]
             [test.components.modules.visions :as visions]
             [test.components.modules.goals :as goals]
-            [test.components.modules.another-goal :as another-goal]))
+            [test.components.modules.another-goal :as another-goal]
+            [test.components.modules.steps :as steps]
+            [test.components.modules.another-step :as another-step]))
 
 (defn page []
   (condp = (global-state :current-page)
@@ -44,4 +46,6 @@
     :scores scores/component
     :visions visions/component
     :goals goals/component
-    :another-goal another-goal/component))
+    :another-goal another-goal/component
+    :steps steps/component
+    :another-step another-step/component))
