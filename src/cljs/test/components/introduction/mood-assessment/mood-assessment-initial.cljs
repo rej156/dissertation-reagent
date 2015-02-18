@@ -7,20 +7,20 @@
 (defn try-move-next []
   (secretary/dispatch! "/introduction/mood-assessment"))
 
-(defn input [id]
-  [:div.id
-   [:input.form-control {:min 1
-                         :max 7
-                         :field :numeric
-                         :id id}]])
+(defn input [id label]
+  [:div.input-field.col.s12
+   [:input {:min 1
+            :max 7
+            :field :numeric
+            :id id}]
+   [:label {:for id} label]])
 
 (def form-template
-  [:div.form-template
-   [:h1 "How happy are you?"]
-   (input :mood.happy)
-   [:button {:on-click #(try-move-next)} "Continue"]
-   ])
+  [:div.row
+   [:h2 "How happy are you?"]
+   (input :mood.happy "On a scale of 1 to 7")
+   [:button.btn.waves-effect.waves-light {:on-click #(try-move-next)} "Continue"]])
 
 (defn component []
-  [:div.mood-assessment
+  [:div.container
    [bind-fields form-template prefs]])

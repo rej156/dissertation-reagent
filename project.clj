@@ -16,7 +16,7 @@
                  [com.cemerick/piggieback "0.1.3"]
                  [weasel "0.4.2"]
                  [reagent "0.5.0-alpha"]
-                 [reagent-forms "0.3.8"]
+                 [reagent-forms "0.4.3"]
                  [secretary "1.2.1"]
                  [alandipert/storage-atom "1.2.3"]
                  [leiningen "2.5.0"]

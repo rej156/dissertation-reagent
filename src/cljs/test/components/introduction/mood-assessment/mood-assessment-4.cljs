@@ -11,20 +11,21 @@
     (swap! prefs assoc-in [:mood :score]
            (- 24 (reduce + (vals (prefs-state :mood)))))))
 
-(defn input [id]
-  [:div.id
-   [:input.form-control {:min 1
-                         :max 7
-                         :field :numeric
-                         :id id}]])
+(defn input [id label]
+  [:div.input-field.col.s12
+   [:input {:min 1
+            :max 7
+            :field :numeric
+            :id id}]
+   [:label {:for id} label]])
 
 (def form-template
-  [:div.form-template
-   [:h1 (vals (get assessment/moods 4))]
-   (input :mood.assured)
-   [:button {:on-click #(try-move-next)} "Continue"]
+  [:div.row
+   [:h2 (vals (get assessment/moods 4))]
+   (input :mood.assured "On a scale of 1 to 7")
+   [:button.btn.waves-effect.waves-light {:on-click #(try-move-next)} "Continue"]
    ])
 
 (defn component []
-  [:div.mood-assessment
+  [:div.container
    [bind-fields form-template prefs]])

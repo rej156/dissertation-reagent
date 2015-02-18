@@ -5,15 +5,18 @@
   (set! (.-location js/window) "#/introduction/fourth"))
 
 (defn component []
-  [:div.introduction-third
-   [:h2 "If we work together, we will \"chat\" every few days. I can help you:"]
-   [:ul
-    [:li "Identify a clearer vision for your future"]
-    [:li "Define specific goals"]
-    [:li "Break down your goals into small action items that fit your
+  [:div.container
+   [:div.row
+    [:div.col.s12
+     [:h2 "If we work together, we will \"chat\" every few days. I can help you:"]
+     [:ul.collection.card-panel
+      [:li.collection-item "Identify a clearer vision for your future"]
+      [:li.collection-item "Define specific goals"]
+      [:li.collection-item "Break down your goals into small action items that fit your
   schedule"]
-    [:li "Find the energy you need to feel motivated and moving forward"]
-    [:li "Learn to adopt a more positive attitude towards the events in your life
+      [:li.collection-item "Find the energy you need to feel motivated and moving forward"]
+      [:li.collection-item "Learn to adopt a more positive attitude towards the events in your life
 - and become more resilient"]]
-   [:h2 "Would you like to give it a try?*"]
-   [:button {:on-click #(try-move-next)} "Yes"]])
+     [:h4 "Would you like to give it a try?*"]
+     [:button.btn.waves-effect.waves-light {:on-click #(try-move-next)} "Let's
+  give it a try!"]]]])

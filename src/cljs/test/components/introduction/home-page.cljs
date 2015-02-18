@@ -7,20 +7,23 @@
     (set! (.-location js/window) "#/introduction/second")))
 
 (defn input [label type id alert]
-  [:div.id
-   [:label label]
-   [:input.form-control {:field type :id id}]
-   [:div.alert.alert-danger
-    {:field :alert :id id :event empty?}
-    alert]])
+  [:div.input-field.col.s12
+   [:input {:field type :id id}]
+   [:label {:for "first_name"} label]
+   ;; [:div.alert.alert-danger
+   ;;  {:field :alert :id id :event empty?}
+   ;;  alert]
+   ])
 
 (def form-template
-  [:div.form-template
-   [:h1 "I'm Liz."]
-   [:h2 "What is your name?*"]
-   (input "First Name" :text :first-name "First name is empty!")
-   [:br]
-   [:button {:on-click #(try-move-next)} "Continue"]])
+  [:div.container
+   [:div.row
+    [:h1 "I'm Liz."]
+    [:h2 "What is your name?*"]
+    (input "First Name" :text :first-name "First name is empty!")
+    [:br]
+    [:button.btn.waves-effect.waves-light {:on-click #(try-move-next)} "Continue"]
+    ]])
 
 (defn component []
   [:div.home-page

@@ -5,9 +5,11 @@
   (set! (.-location js/window) "#/introduction/third"))
 
 (defn component []
-  [:div.introduction-second
-   [:h1 (str "Hi! " (prefs-state :first-name))]
-   [:h2 "Nice to \"meet\" :)"]
-   [:h2 "I am software (as I'm sure you can tell), designed to help people
+  [:div.container
+   [:div.row
+    [:div.col.s12
+     [:h1 (str "Hi! " (prefs-state :first-name))]
+     [:h4 "Nice to \"meet\" :)"]
+     [:h4 "I am software (as I'm sure you can tell), designed to help people
   pursue their dreams and aspirations."]
-   [:button {:on-click #(try-move-next)} "Continue"]])
+     [:button.btn.waves-effect.waves-light {:on-click #(try-move-next)} "Continue"]]]])
