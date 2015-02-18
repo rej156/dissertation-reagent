@@ -25,7 +25,7 @@
     [:h5 "Choose as many as you like:"]
     [:div.row
      (input "I need clarity - can't get my mind to focus" :checkbox :coaching-goals.clarity )
-     (input "I'd like to be able to cope better with life, to be more silient" :checkbox :coaching-goals.resilient )
+     (input "I'd like to be able to cope better with life, to be more resilient" :checkbox :coaching-goals.resilient )
      (input "There's a specific area in my life I want to improve" :checkbox :coaching-goals.specific )
      (input "I'd like to become calmer and reduce my stress" :checkbox :coaching-goals.stress )
      (input "I want to figure the next chapter in my life" :checkbox :coaching-goals.next-chapter )
