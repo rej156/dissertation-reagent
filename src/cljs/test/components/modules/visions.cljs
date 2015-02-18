@@ -15,16 +15,28 @@
   (application/reset-vars!))
 
 (defn component []
-  [:div.visions
-   [:h3 (str "I want you to imagine your most ideal future in the "
-             (application/option-name application/current-option) " area of
+  [:div.container
+   [:div.row
+    [:div.col.s12
+     [:h3 (str "I want you to imagine your most ideal future in the "
+               (application/option-name application/current-option) " area of
   your life.")]
-   [:h4 "Make it as vivid as possible in your mind."]
-   [:h4 "Can you describe it to me in full detail?"]
-   [:textarea {:rows 4
-               :cols 50
-               :on-change #(swap! application/core-values-state assoc-in [application/current-option (keyword
-                                                                                                      (application/option-name
-                                                                                                       application/current-option)) :vision] (.. % -target -value))}]
-   [:br]
-   [:button {:on-click #(try-move-next)} "Save"]])
+     [:h4 "Make it as vivid as possible in your mind."]
+     [:div.row
+      [:div.input-field.col.s12
+       [:textarea.materialize-textarea {:rows 4
+                                        :id (str (application/option-name application/current-option))
+                                        :cols 50
+                                        :on-change #(swap! application/core-values-state assoc-in [application/current-option (keyword
+                                                                                                                               (application/option-name
+                                                                                                                                application/current-option))
+                                                                                                   :vision] (.. % -target -value))}]
+       [:label {:for (str (application/option-name
+                           application/current-option))} "Describe it to Liz in
+  full detail."]]]
+
+     [:br]
+     [:button.btn.waves-effect.waves-light {:on-click #(try-move-next)} "I
+     believe in my future Liz!"]]
+    ]
+   ])

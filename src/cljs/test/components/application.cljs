@@ -10,120 +10,30 @@
    [:label label]
    [:input.form-control {:field type :id id}]])
 
+(def core-value-content
+  {:history ""
+   :score nil
+   :vision ""
+   :current-goal-name ""
+   :current-goal nil
+   :current-step ""
+   :goals [
+           ;; {:name ""
+           ;;  :description ""
+           ;;  :steps ["",""]
+           ;;  }
+           ]
+   })
 
 (defonce core-values-state (atom [
-                                  {:career {:history ""
-                                            :score nil
-                                            :vision ""
-                                            :current-goal-name ""
-                                            :current-goal nil
-                                            :current-step ""
-                                            :goals [
-                                                    ;; {:name ""
-                                                    ;;  :description ""
-                                                    ;;  :steps ["",""]
-                                                    ;;  }
-                                                    ]
-                                            }
-                                   }
-                                  {:finances {:history ""
-                                              :score nil
-                                              :vision ""
-                                              :current-goal-name ""
-                                              :current-goal nil
-                                              :current-step ""
-                                              :goals [
-                                                      ;; {:name ""
-                                                      ;;  :description ""
-                                                      ;;  :steps ["",""]
-                                                      ;;  }
-                                                      ]
-                                              }
-                                   }
-                                  {:health {:history ""
-                                            :score nil
-                                            :vision ""
-                                            :current-goal-name ""
-                                            :current-goal nil
-                                            :current-step ""
-                                            :goals [
-                                                    ;; {:name ""
-                                                    ;;  :description ""
-                                                    ;;  :steps ["",""]
-                                                    ;;  }
-                                                    ]
-                                            }
-                                   }
-                                  {:family {:history ""
-                                            :score nil
-                                            :vision ""
-                                            :current-goal-name ""
-                                            :current-goal nil
-                                            :current-step ""
-                                            :goals [
-                                                    ;; {:name ""
-                                                    ;;  :description ""
-                                                    ;;  :steps ["",""]
-                                                    ;;  }
-                                                    ]
-                                            }
-                                   }
-                                  {:romance {:history ""
-                                             :score nil
-                                             :vision ""
-                                             :current-goal-name ""
-                                             :current-goal nil
-                                             :current-step ""
-                                             :goals [
-                                                     ;; {:name ""
-                                                     ;;  :description ""
-                                                     ;;  :steps ["",""]
-                                                     ;;  }
-                                                     ]
-                                             }
-                                   }
-                                  {:personal-growth {:history ""
-                                                     :score nil
-                                                     :vision ""
-                                                     :current-goal-name ""
-                                                     :current-goal nil
-                                                     :current-step ""
-                                                     :goals [
-                                                             ;; {:name ""
-                                                             ;;  :description ""
-                                                             ;;  :steps ["",""]
-                                                             ;;  }
-                                                             ]
-                                                     }
-                                   }
-                                  {:fun {:history ""
-                                         :score nil
-                                         :vision ""
-                                         :current-goal-name ""
-                                         :current-goal nil
-                                         :current-step ""
-                                         :goals [
-                                                 ;; {:name ""
-                                                 ;;  :description ""
-                                                 ;;  :steps ["",""]
-                                                 ;;  }
-                                                 ]
-                                         }
-                                   }
-                                  {:physical-environment {:history ""
-                                                          :score nil
-                                                          :vision ""
-                                                          :current-goal-name ""
-                                                          :current-goal nil
-                                                          :current-step ""
-                                                          :goals [
-                                                                  ;; {:name ""
-                                                                  ;;  :description ""
-                                                                  ;;  :steps ["",""]
-                                                                  ;;  }
-                                                                  ]
-                                                          }
-                                   }
+                                  {:career core-value-content}
+                                  {:finances core-value-content}
+                                  {:health core-value-content}
+                                  {:family core-value-content}
+                                  {:romance core-value-content}
+                                  {:personal-growth core-value-content}
+                                  {:fun core-value-content}
+                                  {:physical-environment core-value-content}
                                   ]))
 
 
@@ -390,32 +300,55 @@
   (swap! core-values-state assoc-in [0 :career :current-goal] 0))
 
 (defn component []
+  (populate-with-no-scores (map-scores-to-vec))
+  (populate-remaining-with-lowest-scores (map-scores-to-vec))
   [:div.application
-   ;; (.log js/console (pr-str mobile-parser))
-   ;; (.log js/console (str "Parsed output:" (nth (get (mobile-parser "abcd") 1) 1)))
-   [:p (pr-str @core-values-state)]
-   [:p (str "First option: " first-option)]
-   [:p (str "Second option: " second-option)]
-   [:p (str "Third option: " third-option)]
-   (populate-with-no-scores (map-scores-to-vec))
-   (populate-remaining-with-lowest-scores (map-scores-to-vec))
-   ;;(populate-when-equal-scores (map-scores-to-vec))
-   [:div.form-template
-    [:h1 "Options"]
-    [:ol
-     [:li {:on-click #(parse-option-history-link first-option)}
-      [:label "First option"]
-      [:p (parse-option-history first-option)]
-      ]
-     [:li {:on-click #(parse-option-history-link second-option)}
-      [:label "Second option"]
-      [:p (parse-option-history second-option)]
-      ]
-     [:li {:on-click #(parse-option-history-link third-option)}
-      [:label "Third option"]
-      [:p (parse-option-history third-option)]
-      ]
-     ]
+   [:nav
+    [:div.nav-wrapper
+     [:div.row
+      [:div.col.s12
+      [:ul
+       [:div.col.s3
+        [:li
+         [:a {
+              :href "/#/modules/scores?current_option=0"
+              } "Goals"]]]
+       [:div.col.s3
+        [:li
+         [:a {
+              :href "sass"
+              } "Past"]]]
+       [:div.col.s3
+        [:li
+         [:a {
+              :href "sass"
+              } "Present"]]]
+       [:div.col.s3
+        [:li
+         [:a {
+              :href "sass"
+              } "Future"]]]]]]
+     ]]
+   [:div.container
+    ;; (.log js/console (pr-str mobile-parser))
+    ;; (.log js/console (str "Parsed output:" (nth (get (mobile-parser "abcd") 1) 1)))
+    ;; (populate-when-equal-scores (map-scores-to-vec))
+    [:div.row
+     [:div.col.s12.intro
+      [:h3 (str "Hi " (prefs-state :first-name) "!")]
+      [:h4 "Would you like to?"]]]
+    [:div.row
+     [:div.section.actions
+      [:div.col.s12.m4
+       [:div.card-panel.teal {:on-click #(parse-option-history-link first-option)}
+        [:h5 (parse-option-history first-option)]]]
+      [:div.col.s12.m4
+       [:div.card-panel.blue {:on-click #(parse-option-history-link second-option)}
+        [:h5 (parse-option-history second-option)]]]
+      [:div.col.s12.m4
+       [:div.card-panel.yellow {:on-click #(parse-option-history-link third-option)}
+        [:h5 (parse-option-history third-option)]]]]]
+    ;; [bind-fields form-template prefs]
     ]
-   ;; [bind-fields form-template prefs]
-   ])
+   ]
+  )
