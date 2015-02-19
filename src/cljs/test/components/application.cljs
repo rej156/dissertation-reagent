@@ -100,30 +100,50 @@
 (defn duplicates? [xs]
   (not= (count (distinct xs)) (count xs)))
 
+(defn min-index [v]
+  (let [length (count v)]
+    (loop [minimum (v 0)
+           min-index 0
+           i 1]
+      (if (< i length)
+        (let [value (v i)]
+          (if (< value minimum)
+            (recur value i (inc i))
+            (recur minimum min-index (inc i))))
+        min-index))))
+
 (defn populate-remaining-with-lowest-scores [scores]
   (loop [remaining-scores scores
          current-index 0]
     (when (not-empty remaining-scores)
-      (let [smallest-index (index-of remaining-scores (apply min remaining-scores))
+      (let [first-index (first (apply min-key second (map-indexed vector remaining-scores)))
+            second-index (second (apply min-key second (map-indexed vector remaining-scores)))
             current-smallest-score (apply min remaining-scores)]
-        (if-not (nil? current-smallest-score)
+        (if-not (or (nil? current-smallest-score) (contains? nil remaining-scores))
           (if (nil? first-option)
-            (set! first-option smallest-index)
+            (set! first-option first-index)
             (if (nil? second-option)
-              (set! second-option smallest-index)
-              (if (nil? third-option)
-                (set! third-option smallest-index)
-                (if (= first-option second-option third-option)
-                  (do
-                    (set! second-option 1)
-                    (set! third-option 2))))))
-          (if (nil? third-option)
-            (set! third-option 0)
-            (if (and (nil? second-option) (= third-option 0))
-              (set! second-option 1)
-              (if (nil? first-option)
-                (set! first-option 2))))))
-      (recur (rest remaining-scores) (inc current-index)))))
+              (set! second-option second-index)
+              (when (> (count remaining-scores) 2)
+                (if (nil? third-option)
+                  (try
+                    (set! third-option (nth (apply min-key second (map-indexed
+                                                                   vector
+                                                                   remaining-scores)) 2))
+                    (catch :default e
+                      (if (>= first-option 6)
+                        (do
+                          (set! second-option 1)
+                          (set! third-option 2))
+                        (do
+                          (set! second-option (+ first-option 1))
+                          (set! third-option (+ first-option 2))))))))))
+          (if (or (nil? second-option) (nil? third-option))
+            (do
+              (set! second-option 0)
+              (set! third-option 1))
+            ))
+        (recur (rest remaining-scores) (inc current-index))))))
 
 (defn initial-parsed-option-history [option]
   (if-not (nil? option)
@@ -134,35 +154,36 @@
                              (:history))))))
 
 (defn final-final-parsing [option-name option]
-  (if (nil? (-> (get @core-values-state option)
-                (vals)
-                (first)
-                (:current-goal)))
-    (str "Add or commit to a goal for " option-name)
-    (if (empty? (-> (get @core-values-state option)
-                    (vals)
-                    (first)
-                    (:current-step)))
-      (str "Add a step for " option-name " goal '" (-> (get @core-values-state
-                                                            option)
-                                                       (vals)
-                                                       (first)
-                                                       (:current-goal-name)) "'")
-      (str "Confirm completion of the step " (-> (get @core-values-state option)
-                                                 (vals)
-                                                 (first)
-                                                 (:current-step))
-           " for goal " (-> (get @core-values-state
-                                 option)
-                            (vals)
-                            (first)
-                            (:current-goal-name))))))
+  (if-not (nil? option)
+    (if (nil? (-> (get @core-values-state option)
+                  (vals)
+                  (first)
+                  (:current-goal)))
+      (str "Add or commit to a goal for " option-name)
+      (if (empty? (-> (get @core-values-state option)
+                      (vals)
+                      (first)
+                      (:current-step)))
+        (str "Add a step for " option-name " goal '" (-> (get @core-values-state
+                                                              option)
+                                                         (vals)
+                                                         (first)
+                                                         (:current-goal-name)) "'")
+        (str "Confirm completion of the step " (-> (get @core-values-state option)
+                                                   (vals)
+                                                   (first)
+                                                   (:current-step))
+             " for goal " (-> (get @core-values-state
+                                   option)
+                              (vals)
+                              (first)
+                              (:current-goal-name)))))))
 ;; Take me to the existing_goals = 1 page but add a link to add another
 ;; goal page
 
 
 (defn final-parsing [parsed-option option-name option]
-  (if-not (nil? parsed-option)
+  (if-not (and (nil? parsed-option) (nil? option))
     (condp = (first parsed-option)
       :R (str "Add a vision for " option-name)
       :V (str "Add a goal for " option-name)
@@ -170,9 +191,10 @@
       "Failed")))
 
 (defn parse-option-history [option]
-  (condp = (initial-parsed-option-history option)
-    :S (str "Add a score for " (option-name option))
-    (final-parsing (initial-parsed-option-history option) (option-name option) option)))
+  (if-not (nil? option)
+    (condp = (initial-parsed-option-history option)
+      :S (str "Add a score for " (option-name option))
+      (final-parsing (initial-parsed-option-history option) (option-name option) option))))
 
 ;; Do we populate first-options with the indexes of the core values with no
 ;; scores then the smallest scores?
@@ -220,6 +242,7 @@
 ;; Mood evaluation and timer
 ;; History of actions for a given core value
 ;; List of all goals for a given core value
+;; List of all visions
 
 ;; (print first-option)
 ;; (print second-option)
@@ -257,17 +280,19 @@
 
 
 (defn final-parsing-link [parsed-option option]
-  (condp = (first parsed-option)
-    :R (set! (.-location js/window) (str "#/modules/visions?current_option=" option))
-    :V (set! (.-location js/window) (str "#/modules/goals?current_option="
-                                         option "&existing_goals=" (option-existing-goals option)))
-    :G (final-final-parsing-link option)
-    (.log js/console "Failed!")))
+  (if-not (nil? parsed-option)
+    (condp = (first parsed-option)
+      :R (set! (.-location js/window) (str "#/modules/visions?current_option=" option))
+      :V (set! (.-location js/window) (str "#/modules/goals?current_option="
+                                           option "&existing_goals=" (option-existing-goals option)))
+      :G (final-final-parsing-link option)
+      (.log js/console "Failed!"))))
 
 (defn parse-option-history-link [option]
-  (condp = (initial-parsed-option-history option)
-    :S (set! (.-location js/window) (str "#/modules/scores?current_option=" option))
-    (final-parsing-link (initial-parsed-option-history option) option)))
+  (if-not (nil? option)
+    (condp = (initial-parsed-option-history option)
+      :S (set! (.-location js/window) (str "#/modules/scores?current_option=" option))
+      (final-parsing-link (initial-parsed-option-history option) option))))
 
 (defn setup-visions []
   (loop [current @core-values-state
@@ -307,27 +332,27 @@
     [:div.nav-wrapper
      [:div.row
       [:div.col.s12
-      [:ul
-       [:div.col.s3
-        [:li
-         [:a {
-              :href "/#/modules/scores?current_option=0"
-              } "Goals"]]]
-       [:div.col.s3
-        [:li
-         [:a {
-              :href "sass"
-              } "Past"]]]
-       [:div.col.s3
-        [:li
-         [:a {
-              :href "sass"
-              } "Present"]]]
-       [:div.col.s3
-        [:li
-         [:a {
-              :href "sass"
-              } "Future"]]]]]]
+       [:ul
+        [:div.col.s3
+         [:li
+          [:a {
+               :href "/#/modules/scores?current_option=0"
+               } "Goals"]]]
+        [:div.col.s3
+         [:li
+          [:a {
+               :href "sass"
+               } "Past"]]]
+        [:div.col.s3
+         [:li
+          [:a {
+               :href "sass"
+               } "Present"]]]
+        [:div.col.s3
+         [:li
+          [:a {
+               :href "sass"
+               } "Future"]]]]]]
      ]]
    [:div.container
     ;; (.log js/console (pr-str mobile-parser))
