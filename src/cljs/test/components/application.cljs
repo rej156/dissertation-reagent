@@ -74,6 +74,12 @@
     g = 'c'
     s = 'd'"))
 
+(defn index-of [coll v]
+  (let [i (count (take-while #(not= v %) coll))]
+    (when (or (< i (count coll))
+              (= v (last coll)))
+      i)))
+
 (defn populate-with-no-scores [scores]
   (loop [remaining-scores scores
          counter 0]
@@ -90,27 +96,6 @@
 
 (defn map-scores-to-vec []
   (mapv #(:score (first (vals %))) @core-values-state))
-
-(defn index-of [coll v]
-  (let [i (count (take-while #(not= v %) coll))]
-    (when (or (< i (count coll))
-              (= v (last coll)))
-      i)))
-
-(defn duplicates? [xs]
-  (not= (count (distinct xs)) (count xs)))
-
-(defn min-index [v]
-  (let [length (count v)]
-    (loop [minimum (v 0)
-           min-index 0
-           i 1]
-      (if (< i length)
-        (let [value (v i)]
-          (if (< value minimum)
-            (recur value i (inc i))
-            (recur minimum min-index (inc i))))
-        min-index))))
 
 (defn populate-remaining-with-lowest-scores [scores]
   (loop [remaining-scores scores
