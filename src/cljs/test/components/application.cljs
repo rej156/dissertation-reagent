@@ -23,6 +23,7 @@
            ;;  :steps ["",""]
            ;;  }
            ]
+   :completed-goals []
    })
 
 (defonce core-values-state (atom [
@@ -35,7 +36,6 @@
                                   {:fun core-value-content}
                                   {:physical-environment core-value-content}
                                   ]))
-
 
 (def first-option nil)
 (def second-option nil)
@@ -126,8 +126,7 @@
           (if (or (nil? second-option) (nil? third-option))
             (do
               (set! second-option 0)
-              (set! third-option 1))
-            ))
+              (set! third-option 1))))
         (recur (rest remaining-scores) (inc current-index))))))
 
 (defn initial-parsed-option-history [option]
@@ -162,7 +161,11 @@
                                    option)
                               (vals)
                               (first)
-                              (:current-goal-name)))))))
+                              (:current-goal-name)) " of "
+                              (-> (get @core-values-state option)
+                                  (keys)
+                                  (first)
+                                  (name)))))))
 ;; Take me to the existing_goals = 1 page but add a link to add another
 ;; goal page
 
