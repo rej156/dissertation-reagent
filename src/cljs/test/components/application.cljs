@@ -314,6 +314,14 @@
   everywhere")
   (swap! core-values-state assoc-in [0 :career :current-goal] 0))
 
+(defn history-style []
+  (if (> (count @history-state) 5)
+    {:overflow "scroll"
+     :margin-top "10px"
+     :height "200px"}
+    {:overflow "scroll"
+     :margin-top "10px"}))
+
 (defn component []
   (populate-with-no-scores (map-scores-to-vec))
   (populate-remaining-with-lowest-scores (map-scores-to-vec))
@@ -348,9 +356,11 @@
     ;; (.log js/console (pr-str mobile-parser))
     ;; (.log js/console (str "Parsed output:" (nth (get (mobile-parser "abcd") 1) 1)))
     ;; (populate-when-equal-scores (map-scores-to-vec))
-    [:div.row
-     [:div.col.s12
-      (into [:ul.collection] (map (partial vector :li.collection-item) @history-state))]]
+    (if-not (empty? @history-state)
+      [:div.row {:style (history-style)}
+       [:div.section.history
+        [:div.col.s12
+         (into [:ul.collection] (reverse (map (partial vector :li.collection-item) @history-state)))]]])
     [:div.divider]
     [:div.row
      [:div.col.s12.intro

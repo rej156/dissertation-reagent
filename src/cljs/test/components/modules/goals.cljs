@@ -3,7 +3,8 @@
             [reagent.core :as reagent :refer [atom]]
             [secretary.core :as secretary]
             [reagent-forms.core :refer [bind-fields]]
-            [test.components.application :as application]))
+            [test.components.application :as application]
+            [clojure.string :as str]))
 
 (def existing-goals nil)
 
@@ -27,7 +28,10 @@
          (str (-> (get @application/core-values-state application/current-option)
                   (vals)
                   (first)
-                  (:history)) "c")))
+                  (:history)) "c"))
+  (swap! application/history-state conj (str "Added goal: "
+                                               (str/capitalize
+                                                (str (:name @goal-atom))))))
 
 (defn commit-goal []
   (swap! application/core-values-state assoc-in
@@ -85,13 +89,16 @@
   [:div.container
    [:div.row
     [:div.col.s12
-     [:h3 "To get closer to your vision: "]
-     [:h4 (str (-> (get @application/core-values-state
-                        application/current-option)
-                   (vals)
-                   (first)
-                   (:vision)))]
-     [:h4 "Choose a goal to commit to and get closer to it!"]
+     [:div.card-panel.teal.introduction
+      [:h3 "To get closer to your vision: "]
+      [:h4 (str (-> (get @application/core-values-state
+                         application/current-option)
+                    (vals)
+                    (first)
+                    (:vision)))]
+      [:h4 (str "in your " (application/option-name application/current-option) ".")]]
+     [:div.card-panel.goal-commit
+      [:h4 "Choose a goal to commit to and get closer to it!"]
      [:div.row
       [:div.input-field.col.s12
        [:textarea.materialize-textarea {:rows 4
@@ -117,7 +124,8 @@
      [:button.btn.waves-effect.waves-light {:on-click #(try-move-next "save")}
       "Save for now" [:i.mdi-content-save.right]]
      [:br]
-     [:button.btn.waves-effect.waves-light {:on-click #(try-move-next "go back")} "Go back!"]]]
+     [:button.btn.waves-effect.waves-light {:on-click #(try-move-next "go back")} "Go back!"]]
+     ]]
    ])
 
 (defn commit-a-goal-component []

@@ -1,17 +1,22 @@
 (ns test.components.modules.visions
   (:require [reagent-forms.core :refer [bind-fields]]
             [test.session :as session :refer [prefs prefs-state]]
-            [test.components.application :as application]))
+            [test.components.application :as application]
+            [clojure.string :as str]))
 
 (defn try-move-next []
   (set! (.-location js/window) "#/application")
+  (swap! application/history-state conj (str "Added Best Possible Self: "
+                                             (str/capitalize (str (application/option-name
+                                                                         application/current-option)))))
   (swap! application/core-values-state assoc-in [application/current-option (keyword
                                                                              (application/option-name
-  application/current-option)) :history] (str (-> (get
-                                                   @application/core-values-state application/current-option)
-                                                  (vals)
-                                                  (first)
-                                                  (:history)) "b"))
+                                                                              application/current-option)) :history] (str (-> (get
+                                                                                                                               @application/core-values-state application/current-option)
+                                                                                                                              (vals)
+                                                                                                                              (first)
+                                                                                                                              (:history)) "b"))
+
   (application/reset-vars!))
 
 (defn component []

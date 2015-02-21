@@ -1,7 +1,8 @@
 (ns test.components.modules.scores
   (:require [reagent-forms.core :refer [bind-fields]]
             [test.session :as session :refer [prefs prefs-state]]
-            [test.components.application :as application]))
+            [test.components.application :as application]
+            [clojure.string :as str]))
 
 (defn try-move-next []
   (if-not (> (count (-> (get @application/core-values-state
@@ -11,15 +12,15 @@
                         (:history))) 1)
     (swap! application/core-values-state assoc-in [application/current-option (keyword
                                                                                (application/option-name application/current-option)) :history] "a"))
+  (swap! application/history-state conj (str "Added Score: "
+                                             (str/capitalize (str (application/option-name
+                                                                         application/current-option))) " " (-> (get @application/core-values-state
+                                                                                                                   application/current-option)
+                                                                                                              (vals)
+                                                                                                              (first)
+                                                                                                              (:score))))
   (set! (.-location js/window) "#/application")
-  (reset! application/history-state (conj @application/history-state
-                                          (str "Added Score: "
-                                               (clojure.string/capitalize (application/option-name
-                                                                           application/current-option)) " " (-> (get @application/core-values-state
-                                                                                                                     application/current-option)
-                                                                                                                (vals)
-                                                                                                                (first)
-                                                                                                                (:score)))))
+
   (application/reset-vars!))
 
 (defn component []
