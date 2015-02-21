@@ -25,7 +25,7 @@
     [:div.col.s12
      [:div.row
       [:h2 "So this is what you have told me!"]
-      [:div.col.s6
+      [:div.col.s12
        [:ul.collection.with-header
         [:li.collection-header [:h4 "User Profile:"]]
         [:li.collection-item (str (prefs-state :first-name) " " (prefs-state :last-name))]
@@ -34,7 +34,7 @@
         [:li.collection-item (if-not (nil? (prefs-state :children-no))
                                (str (prefs-state :children-no) " children")
                                (str "No children"))]]]
-      [:div.col.s6
+      [:div.col.s12
        [:ul.collection.with-header
         [:li.collection-header [:h4 "Coaching goals:"]]
         (for [[k v] (prefs-state :coaching-goals)]

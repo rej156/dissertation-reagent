@@ -381,3 +381,5 @@
     ]
    ]
   )
+
+;; (js/toast "I am a testing toast" 4000)

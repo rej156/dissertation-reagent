@@ -21,7 +21,8 @@
      [:h4 "Would you like to try a little exercise to boost your mood?"]
      [:div.btn-group {:field :single-select :id :show-gratitude-exercise}
       [:button.btn.waves-effect.waves-light {:key :yes} "Sure!"]
-      [:button.btn.waves-effect.waves-light {:key :no} "Not right now Liz"]]
+      [:button.btn.waves-effect.waves-light {:key :no
+                                             :on-click #(try-move-next)} "Not right now Liz"]]
      [:div.input-field.col.s12.gratitude-exercise {:field :container :visible? #(= :yes
                                                                                    (:show-gratitude-exercise
                                                                                     %))}
