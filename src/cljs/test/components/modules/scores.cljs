@@ -12,6 +12,14 @@
     (swap! application/core-values-state assoc-in [application/current-option (keyword
                                                                                (application/option-name application/current-option)) :history] "a"))
   (set! (.-location js/window) "#/application")
+  (reset! application/history-state (conj @application/history-state
+                                          (str "Added Score: "
+                                               (clojure.string/capitalize (application/option-name
+                                                                           application/current-option)) " " (-> (get @application/core-values-state
+                                                                                                                     application/current-option)
+                                                                                                                (vals)
+                                                                                                                (first)
+                                                                                                                (:score)))))
   (application/reset-vars!))
 
 (defn component []
@@ -29,7 +37,7 @@
                                                                                                       application/current-option)) :score] (js/parseInt (.. % -target -value)))
               }]
      [:label {:for (str (application/option-name application/current-option))}
-  "On a scale of 1 to 8"]]
+      "On a scale of 1 to 8"]]
     [:button.btn.waves-effect.waves-light {:on-click #(try-move-next)} "Save"]]])
 
 ;; Update history with string at the end
