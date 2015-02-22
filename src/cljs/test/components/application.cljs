@@ -314,72 +314,80 @@
   everywhere")
   (swap! core-values-state assoc-in [0 :career :current-goal] 0))
 
-(defn history-style []
-  (if (> (count @history-state) 5)
-    {:overflow "scroll"
-     :margin-top "10px"
-     :height "200px"}
-    {:overflow "scroll"
-     :margin-top "10px"}))
+(defn history-scroll-bottom []
+  (let [hist (.getElementById js/document "history")]
+    (try
+      (set! (.-scrollTop hist) (.-scrollHeight hist))
+      (catch :default e
+        (.log js/console e)))))
 
-(defn component []
-  (populate-with-no-scores (map-scores-to-vec))
-  (populate-remaining-with-lowest-scores (map-scores-to-vec))
-  [:div.application
-   [:nav
-    [:div.nav-wrapper
-     [:div.row
-      [:div.col.s12
-       [:ul
-        [:div.col.s3
-         [:li
-          [:a {
-               :href "/#/modules/scores?current_option=0"
-               } "Goals"]]]
-        [:div.col.s3
-         [:li
-          [:a {
-               :href "sass"
-               } "Past"]]]
-        [:div.col.s3
-         [:li
-          [:a {
-               :href "sass"
-               } "Present"]]]
-        [:div.col.s3
-         [:li
-          [:a {
-               :href "sass"
-               } "Future"]]]]]]
-     ]]
-   [:div.container
-    ;; (.log js/console (pr-str mobile-parser))
-    ;; (.log js/console (str "Parsed output:" (nth (get (mobile-parser "abcd") 1) 1)))
-    ;; (populate-when-equal-scores (map-scores-to-vec))
-    (if-not (empty? @history-state)
-      [:div.row {:style (history-style)}
-       [:div.section.history
+  (defn history-style []
+    (if (> (count @history-state) 5)
+      {:overflow "scroll"
+       :margin-top "10px"
+       :height "200px"}
+      {:overflow "scroll"
+       :margin-top "10px"}))
+
+  (defn component []
+    (populate-with-no-scores (map-scores-to-vec))
+    (populate-remaining-with-lowest-scores (map-scores-to-vec))
+    [:div.application
+     [:nav
+      [:div.nav-wrapper
+       [:div.row
         [:div.col.s12
-         (into [:ul.collection] (reverse (map (partial vector :li.collection-item) @history-state)))]]])
-    [:div.divider]
-    [:div.row
-     [:div.col.s12.intro
-      [:h3 (str "Hi " (prefs-state :first-name) "!")]
-      [:h4 "Would you like to?"]]]
-    [:div.row
-     [:div.section.actions
-      [:div.col.s12.m4
-       [:div.card-panel.teal {:on-click #(parse-option-history-link first-option)}
-        [:h5 (parse-option-history first-option)]]]
-      [:div.col.s12.m4
-       [:div.card-panel.blue {:on-click #(parse-option-history-link second-option)}
-        [:h5 (parse-option-history second-option)]]]
-      [:div.col.s12.m4
-       [:div.card-panel.yellow {:on-click #(parse-option-history-link third-option)}
-        [:h5 (parse-option-history third-option)]]]]]
-    ;; [bind-fields form-template prefs]
-    ]
-   ]
-  )
+         [:ul
+          [:div.col.s3
+           [:li
+            [:a {
+                 :href "/#/modules/scores?current_option=0"
+                 } "Goals"]]]
+          [:div.col.s3
+           [:li
+            [:a {
+                 :href "sass"
+                 } "Past"]]]
+          [:div.col.s3
+           [:li
+            [:a {
+                 :href "sass"
+                 } "Present"]]]
+          [:div.col.s3
+           [:li
+            [:a {
+                 :href "sass"
+                 } "Future"]]]]]]
+       ]]
+     [:div.container
+      ;; (.log js/console (pr-str mobile-parser))
+      ;; (.log js/console (str "Parsed output:" (nth (get (mobile-parser "abcd") 1) 1)))
+      ;; (populate-when-equal-scores (map-scores-to-vec))
+      (if-not (empty? @history-state)
+        [:div.row {:id "history"
+                   :style (history-style)}
+         [:div.section
+          [:div.col.s12
+           (into [:ul.collection] (reverse (map (partial vector
+                                                         :li.collection-item) @history-state)))]]])
+      [:div.divider]
+      [:div.row
+       [:div.col.s12.intro
+        [:h3 (str "Hi " (prefs-state :first-name) "!")]
+        [:h4 "Would you like to?"]]]
+      [:div.row
+       [:div.section.actions
+        [:div.col.s12.m4
+         [:div.card-panel.teal {:on-click #(parse-option-history-link first-option)}
+          [:h5 (parse-option-history first-option)]]]
+        [:div.col.s12.m4
+         [:div.card-panel.blue {:on-click #(parse-option-history-link second-option)}
+          [:h5 (parse-option-history second-option)]]]
+        [:div.col.s12.m4
+         [:div.card-panel.yellow {:on-click #(parse-option-history-link third-option)}
+          [:h5 (parse-option-history third-option)]]]]]
+      ;; [bind-fields form-template prefs]
+      ]
+     ])
 
 ;; (js/toast "I am a testing toast" 4000)
