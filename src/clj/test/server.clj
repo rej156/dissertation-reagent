@@ -25,10 +25,11 @@
 (defn run [& [port]]
   (defonce ^:private server
     (do
-      (if is-dev? (start-figwheel))
+      (if is-dev? (do
+                    (browser-repl)
+                    (start-figwheel)))
       (let [port (Integer. (or port (env :port) 10555))]
         (print "Starting web server on port" port ".\n")
-        (browser-repl)
         (run-jetty http-handler {:port port
                           :join? false}))))
   server)
