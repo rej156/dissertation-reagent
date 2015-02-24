@@ -51,8 +51,5 @@
   [:div.container
    [:div.row
     [:div.col.s12
-     [:h2 (str "Your mood is " (-> @prefs
-                                   (:mood)
-                                   (:score)) " on a scale between -18 and
-  +18")]]]
+     [:h2 (str "Your mood is " (get-in @prefs [:mood :score]) " on a scale between -18 and +18")]]]
    [bind-fields form-template gratitude]])
