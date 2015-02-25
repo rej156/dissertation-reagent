@@ -64,9 +64,6 @@
         (first)
         (:goals))))
 
-;;recursively iterate, if first-option isn't nil, set it as the first
-;;core-value that has a nil score or the lowest score
-
 (def mobile-parser
   (insta/parser
    "S = R* V* G*
@@ -168,9 +165,6 @@
                                   (keys)
                                   (first)
                                   (name)))))))
-;; Take me to the existing_goals = 1 page but add a link to add another
-;; goal page
-
 
 (defn final-parsing [parsed-option option-name option]
   (if-not (and (nil? parsed-option) (nil? option))
@@ -186,48 +180,7 @@
       :S (str "Add a score for " (option-name option))
       (final-parsing (initial-parsed-option-history option) (option-name option) option))))
 
-;; Do we populate first-options with the indexes of the core values with no
-;; scores then the smallest scores?
-;; ->> map-scores to vector
-;; if current score is nil, populate option with index value of current score
-;; recur loop again, if current score is the smallest, populate remaining nil
-;; options with index value of the current smallest score
-;; Render the names of the option indexes i.e. (name (first (keys (get @core-values-state first-option))))
-
-;; Now that we've got the indexes of the nil scores and the smallest scores, we
-;; want to work on them. Therefore, we should do the following:
-;; 1) Present the next possible action for that core value to be presented to
-;; the user BUT WITH A RE-RENDER AND PARSING ON EACH USER ACTION
-;; Intermittently, the user is presented to work on the lowest scores at all times.
-;; 2) In these cases, the possible states of action would be...
-;; - [ ] Scoring core value -> Add a "a" string to its (:history (first (vals
-;; current))) -> Set current option var back to nil
-;; **** DO WE UPDATE THE PARSER TO ACCEPT zero or more so it can present the
-;; correct key of the required state? i.e. A score without a goal can still be parsed.
-;; ****
-;; - [ ] Add a vision -> Check if there is a [:V "b"] vector, initiate the
-;; vision adding module then add a "b" to the history string
-;; - [ ] Add/Commit to a goal -> Check if there is a [:G "c" "d" "d"] vector or
-;; a current goal string not being empty,
-;; setting the current option value chosen,
-;; initiate the adding/commiting to a goal module to prompt like the following:
-;; 1) Add a goal to 'XOYO' core value -> Initiate the add a goal module,
-;;  then add the "c" string to the history
-;; 2) Commit to a goal -> Initiate the committing to a goal module, this
-;; displays all the parsed goal names with numbered choice values, setting the
-;; current goal value with the value-index of the chosen option ->
-;; Initiate the add a step module, populate the step name for that chosen goal
-;; and add a "d" to the history string, set the value of the current step as 0
-;; Say that we will remind the user about completing that step periodically
-;; - [ ] Confirm completion of current step name "XOYO" of current goal name
-;; for 'XOYO' core-value->
-;; Initiate the confirm step completion module, prompt the following:
-;; 1) Ask user if they need to add another step, set current step name to new
-;; one and add another "d", incrememnt current step value by 1
-;; 2) Confirm goal completion -> Congratulate them, set current goal string to
-;; empty, set the current step value as nil, ask them to score the core value again
-
-;; ***** Then work on the following:
+;; ***** Work on the following:
 ;; Recent actions
 ;; Mood evaluation and timer
 ;; History of actions for a given core value
@@ -268,7 +221,6 @@
       (set! (.-location js/window) (str "#/modules/steps?current_option="
                                         option "&existing_step=1")))))
 
-
 (defn final-parsing-link [parsed-option option]
   (if-not (nil? parsed-option)
     (condp = (first parsed-option)
@@ -297,21 +249,20 @@
 (defn setup-goals []
   (swap! core-values-state assoc-in [0 :career :score] 5)
   (swap! core-values-state assoc-in [0 :career :history] "abc")
-  (swap! core-values-state assoc-in [0 :career :goals] [{:name "Tits
-  everywhere"
-                                                         :description "Lick
-  them titties"},
-                                                        {:name "lol
-  everywhere"
-                                                         :description "huh
-  them titties"}]))
+  (swap! core-values-state assoc-in [0 :career :goals] [{:name "Become an
+  expert in your field"
+                                                         :description "Source
+  of knowledge"},
+                                                        {:name "Become a freelancer"
+                                                         :description "Remote
+  Clojure Worker"}]))
 
 (defn setup-steps []
   (setup-visions)
   (setup-goals)
-  (swap! core-values-state assoc-in [0 :career :vision] "I want to be like Dan Bilzerian.")
-  (swap! core-values-state assoc-in [0 :career :current-goal-name] "Tits
-  everywhere")
+  (swap! core-values-state assoc-in [0 :career :vision] "Be able to work on
+  your own projects with an inspiring vision.")
+  (swap! core-values-state assoc-in [0 :career :current-goal-name] "Become a freelancer")
   (swap! core-values-state assoc-in [0 :career :current-goal] 0))
 
 (defn history-scroll-bottom []
@@ -321,73 +272,72 @@
       (catch :default e
         (.log js/console e)))))
 
-  (defn history-style []
-    (if (> (count @history-state) 5)
-      {:overflow "scroll"
-       :margin-top "10px"
-       :height "200px"}
-      {:overflow "scroll"
-       :margin-top "10px"}))
+(defn history-style []
+  (if (> (count @history-state) 5)
+    {:overflow "scroll"
+     :margin-top "10px"
+     :height "200px"}
+    {:overflow "scroll"
+     :margin-top "10px"}))
 
-  (defn component []
-    (populate-with-no-scores (map-scores-to-vec))
-    (populate-remaining-with-lowest-scores (map-scores-to-vec))
-    [:div.application
-     [:nav
-      [:div.nav-wrapper
-       [:div.row
+(defn component []
+  (populate-with-no-scores (map-scores-to-vec))
+  (populate-remaining-with-lowest-scores (map-scores-to-vec))
+  ;;Move these to a component that will render with component-will-mount meta descriptions
+  [:div.application
+   [:nav
+    [:div.nav-wrapper
+     [:div.row
+      [:div.col.s12
+       [:ul
+        [:div.col.s3
+         [:li
+          [:a {
+               :href "/#/modules/scores?current_option=0"
+               } "Goals"]]]
+        [:div.col.s3
+         [:li
+          [:a {
+               :href "#"
+               } "Past"]]]
+        [:div.col.s3
+         [:li
+          [:a {
+               :href "#"
+               } "Present"]]]
+        [:div.col.s3
+         [:li
+          [:a {
+               :href "#"
+               } "Future"]]]]]]
+     ]]
+   [:div.container
+    (if-not (empty? @history-state)
+      [:div.row {:id "history"
+                 :style (history-style)}
+       [:div.section
         [:div.col.s12
-         [:ul
-          [:div.col.s3
-           [:li
-            [:a {
-                 :href "/#/modules/scores?current_option=0"
-                 } "Goals"]]]
-          [:div.col.s3
-           [:li
-            [:a {
-                 :href "sass"
-                 } "Past"]]]
-          [:div.col.s3
-           [:li
-            [:a {
-                 :href "sass"
-                 } "Present"]]]
-          [:div.col.s3
-           [:li
-            [:a {
-                 :href "sass"
-                 } "Future"]]]]]]
-       ]]
-     [:div.container
-      ;; (.log js/console (pr-str mobile-parser))
-      ;; (.log js/console (str "Parsed output:" (nth (get (mobile-parser "abcd") 1) 1)))
-      ;; (populate-when-equal-scores (map-scores-to-vec))
-      (if-not (empty? @history-state)
-        [:div.row {:id "history"
-                   :style (history-style)}
-         [:div.section
-          [:div.col.s12
-           (into [:ul.collection] (reverse (map (partial vector
-                                                         :li.collection-item) @history-state)))]]])
-      [:div.divider]
-      [:div.row
-       [:div.col.s12.intro
-        [:h3 (str "Hi " (prefs-state :first-name) "!")]
-        [:h4 "Would you like to?"]]]
-      [:div.row
-       [:div.section.actions
-        [:div.col.s12.m4
-         [:div.card-panel.teal {:on-click #(parse-option-history-link first-option)}
-          [:h5 (parse-option-history first-option)]]]
-        [:div.col.s12.m4
-         [:div.card-panel.blue {:on-click #(parse-option-history-link second-option)}
-          [:h5 (parse-option-history second-option)]]]
-        [:div.col.s12.m4
-         [:div.card-panel.yellow {:on-click #(parse-option-history-link third-option)}
-          [:h5 (parse-option-history third-option)]]]]]
-      ;; [bind-fields form-template prefs]
-      ]
-     ])
+         (into [:ul.collection] (reverse (map (partial vector
+                                                       :li.collection-item) @history-state)))]]])
+    [:div.divider]
+    [:div.row
+     [:div.col.s12.intro
+      [:h3 (str "Hi " (prefs-state :first-name) "!")]
+      [:h4 "Would you like to?"]]]
+    [:div.row
+     [:div.section.actions
+      [:div.col.s12.m4
+       [:div.card-panel.teal {:on-click #(parse-option-history-link first-option)}
+        [:h5 (parse-option-history first-option)]]]
+      [:div.col.s12.m4
+       [:div.card-panel.blue {:on-click #(parse-option-history-link second-option)}
+        [:h5 (parse-option-history second-option)]]]
+      [:div.col.s12.m4
+       [:div.card-panel.yellow {:on-click #(parse-option-history-link third-option)}
+        [:h5 (parse-option-history third-option)]]]]]
+    ;; [bind-fields form-template prefs]
+    ]
+   ])
 
+;; Mobile like notifications
 ;; (js/toast "I am a testing toast" 4000)
