@@ -3,7 +3,8 @@
             [reagent.core :as reagent :refer [atom]]
             [secretary.core :as secretary]
             [instaparse.core :as insta]
-            [reagent-forms.core :refer [bind-fields]]))
+            [reagent-forms.core :refer [bind-fields]]
+            [re-frame.core :as re-frame]))
 
 (defn input [label type id]
   [:div.id
@@ -25,6 +26,7 @@
            ]
    :completed-goals []
    })
+
 
 (defonce core-values-state (atom [
                                   {:career core-value-content}
