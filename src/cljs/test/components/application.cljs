@@ -4,7 +4,8 @@
             [secretary.core :as secretary]
             [instaparse.core :as insta]
             [reagent-forms.core :refer [bind-fields]]
-            [re-frame.core :as re-frame]))
+            [re-frame.core :as re-frame]
+            [test.components.nav :as nav]))
 
 (defn input [label type id]
   [:div.id
@@ -287,32 +288,7 @@
   (populate-remaining-with-lowest-scores (map-scores-to-vec))
   ;;Move these to a component that will render with component-will-mount meta descriptions
   [:div.application
-   [:nav
-    [:div.nav-wrapper
-     [:div.row
-      [:div.col.s12
-       [:ul
-        [:div.col.s3
-         [:li
-          [:a {
-               :href "/#/modules/scores?current_option=0"
-               } "Goals"]]]
-        [:div.col.s3
-         [:li
-          [:a {
-               :href "#"
-               } "Past"]]]
-        [:div.col.s3
-         [:li
-          [:a {
-               :href "#"
-               } "Present"]]]
-        [:div.col.s3
-         [:li
-          [:a {
-               :href "#"
-               } "Future"]]]]]]
-     ]]
+   (nav/component)
    [:div.container
     (if-not (empty? @history-state)
       [:div.row {:id "history"
