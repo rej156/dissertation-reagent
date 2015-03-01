@@ -35,35 +35,40 @@
 
 (defn commit-goal []
   (try
+    (swap! application/core-values-state assoc-in [application/current-option (keyword (application/option-name
+                                                                                        application/current-option))
+                                                   :current-goal]
+           (- (count (-> (get @application/core-values-state application/current-option)
+                         (vals)
+                         (first)
+                         (:goals))) 1))
     (swap! application/core-values-state assoc-in
            [application/current-option (keyword (application/option-name
-                                                 application/current-option)) :current-goal] (- (count (-> (get @application/core-values-state application/current-option)
-                                                                                                           (vals)
-                                                                                                           (first)
-                                                                                                           (:goals))) 1))
+                                                 application/current-option)) :current-goal-name] (:name @goal-atom))
     (catch :default e
-      (.log js/console e)))
-  (swap! application/core-values-state assoc-in
-         [application/current-option (keyword (application/option-name
-                                               application/current-option)) :current-goal-name] (:name @goal-atom)))
+      ))
+  )
 
 (defn commit-goal-option [option]
-  (swap! application/core-values-state assoc-in
-         [application/current-option (keyword (application/option-name
-                                               application/current-option)) :current-goal] option)
-  (try
-    (swap! application/core-values-state assoc-in
-           [application/current-option (keyword (application/option-name
-                                                 application/current-option))
-            :current-goal-name] (-> (get (-> (get @application/core-values-state
-                                                  application/current-option)
-                                             (vals)
-                                             (first)
-                                             (:goals)) option)
-                                    (:name)))
-    (catch :default e
-      (.log js/console e)))
-  (set! (.-location js/window) "#/application"))
+  (if-not (nil? option)
+    (try
+      (swap! application/core-values-state assoc-in
+             [application/current-option (keyword (application/option-name
+                                                   application/current-option)) :current-goal] option)
+      (swap! application/core-values-state assoc-in [application/current-option (keyword (application/option-name
+                                                                                          application/current-option))
+                                                     :current-goal-name]
+             (get-in application/core-values-state [application/current-option
+  (keyword (application/option-name application/current-option :goals (-> (get
+                                                                           @application/core-values-state application/current-option)
+                                                                          (vals)
+                                                                          (first)
+                                                                          (:current-goal))))
+  :name])
+             )
+      (catch :default e
+        ))
+    (set! (.-location js/window) "#/application")))
 
 (defn reset-goal-atom []
   (reset! goal-atom {}))

@@ -16,7 +16,13 @@
     [:div.col.s12
      [:h2 (str "Your mood is " (get-in @prefs [:mood :score]) " on a scale between -18 and +18")]]]
    [:div.row
-    (if (< (get-in @prefs [:mood :score]))
+    (if (<= (get-in @prefs [:mood :score]) 0)
+      [:div.mood-good
+       [:h3  "Looks like your mood is good!"]
+       [:button.btn.waves-effect.waves-light {:on-click #(set! (.-location
+                                                                js/window)
+                                                               "#/application")}
+        "Let's start improving my life Liz!" [:i.mdi-content-send.right]]]
       [:div.down-mood
        [:div.col.s12
         [:h4  "Looks like your mood is a little down."]
@@ -45,10 +51,4 @@
             "Let's start improving my life Liz!" [:i.mdi-content-send.right]]]
           )
         ]])
-    (if (<= 0 (get-in @prefs [:mood :score]))
-      [:div.mood-good
-       [:h3  "Looks like your mood is good!"]
-       [:button.btn.waves-effect.waves-light {:on-click #(set! (.-location
-                                                                js/window)
-                                                               "#/application")} "Let's start improving my life Liz!" [:i.mdi-content-send.right]]])
     ]])
