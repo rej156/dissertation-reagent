@@ -34,12 +34,15 @@
                                                 (str (:name @goal-atom))))))
 
 (defn commit-goal []
-  (swap! application/core-values-state assoc-in
-         [application/current-option (keyword (application/option-name
-                                               application/current-option)) :current-goal] (- (count (-> (get @application/core-values-state application/current-option)
-                                                                                                         (vals)
-                                                                                                         (first)
-                                                                                                         (:goals))) 1))
+  (try
+    (swap! application/core-values-state assoc-in
+           [application/current-option (keyword (application/option-name
+                                                 application/current-option)) :current-goal] (- (count (-> (get @application/core-values-state application/current-option)
+                                                                                                           (vals)
+                                                                                                           (first)
+                                                                                                           (:goals))) 1))
+    (catch :default e
+      (.log js/console e)))
   (swap! application/core-values-state assoc-in
          [application/current-option (keyword (application/option-name
                                                application/current-option)) :current-goal-name] (:name @goal-atom)))
@@ -48,15 +51,18 @@
   (swap! application/core-values-state assoc-in
          [application/current-option (keyword (application/option-name
                                                application/current-option)) :current-goal] option)
-  (swap! application/core-values-state assoc-in
-         [application/current-option (keyword (application/option-name
-                                               application/current-option))
-          :current-goal-name] (-> (get (-> (get @application/core-values-state
-                                                application/current-option)
-                                           (vals)
-                                           (first)
-                                           (:goals)) option)
-                                  (:name)))
+  (try
+    (swap! application/core-values-state assoc-in
+           [application/current-option (keyword (application/option-name
+                                                 application/current-option))
+            :current-goal-name] (-> (get (-> (get @application/core-values-state
+                                                  application/current-option)
+                                             (vals)
+                                             (first)
+                                             (:goals)) option)
+                                    (:name)))
+    (catch :default e
+      (.log js/console e)))
   (set! (.-location js/window) "#/application"))
 
 (defn reset-goal-atom []
@@ -99,32 +105,32 @@
       [:h4 (str "in your " (application/option-name application/current-option) ".")]]
      [:div.card-panel.goal-commit
       [:h4 "Choose a goal to commit to and get closer to it!"]
-     [:div.row
-      [:div.input-field.col.s12
-       [:textarea.materialize-textarea {:rows 4
-                                        :cols 50
-                                        :id "goal-name"
-                                        :on-change #(swap! goal-atom assoc :name (.. % -target
-                                                                                     -value))}]
-       [:label {:for "goal-name"} "Goal name"]]]
-     [:div.row
-      [:div.input-field.col.s12
-       [:textarea.materialize-textarea {:rows 4
-                                        :cols 50
-                                        :id "goal-description"
-                                        :on-change #(swap! goal-atom assoc :description (.. % -target
-                                                                                            -value))}]
-       [:label {:for "goal-description"} "Goal description"]
-       ]]
-     [:button.btn.waves-effect.waves-light {:on-click #(try-move-next "commit")} "Going to commit to it
+      [:div.row
+       [:div.input-field.col.s12
+        [:textarea.materialize-textarea {:rows 4
+                                         :cols 50
+                                         :id "goal-name"
+                                         :on-change #(swap! goal-atom assoc :name (.. % -target
+                                                                                      -value))}]
+        [:label {:for "goal-name"} "Goal name"]]]
+      [:div.row
+       [:div.input-field.col.s12
+        [:textarea.materialize-textarea {:rows 4
+                                         :cols 50
+                                         :id "goal-description"
+                                         :on-change #(swap! goal-atom assoc :description (.. % -target
+                                                                                             -value))}]
+        [:label {:for "goal-description"} "Goal description"]
+        ]]
+      [:button.btn.waves-effect.waves-light {:on-click #(try-move-next "commit")} "Going to commit to it
   now Liz!" [:i.mdi-action-accessibility.right]]
-     [:br]
-     [:button.btn.waves-effect.waves-light {:on-click #(try-move-next "add another")} "Add another goal" [:i.mdi-av-my-library-add.right]]
-     [:br]
-     [:button.btn.waves-effect.waves-light {:on-click #(try-move-next "save")}
-      "Save for now" [:i.mdi-content-save.right]]
-     [:br]
-     [:button.btn.waves-effect.waves-light {:on-click #(try-move-next "go back")} "Go back!"]]
+      [:br]
+      [:button.btn.waves-effect.waves-light {:on-click #(try-move-next "add another")} "Add another goal" [:i.mdi-av-my-library-add.right]]
+      [:br]
+      [:button.btn.waves-effect.waves-light {:on-click #(try-move-next "save")}
+       "Save for now" [:i.mdi-content-save.right]]
+      [:br]
+      [:button.btn.waves-effect.waves-light {:on-click #(try-move-next "go back")} "Go back!"]]
      ]]
    ])
 
