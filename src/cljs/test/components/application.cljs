@@ -283,39 +283,57 @@
     {:overflow "scroll"
      :margin-top "10px"}))
 
-(defn component []
-  (populate-with-no-scores (map-scores-to-vec))
-  (populate-remaining-with-lowest-scores (map-scores-to-vec))
+(defn content-component []
+  [:div.content
+   [:div.row
+    [:div.col.s12.intro
+     [:h3 (str "Hi " (prefs-state :first-name) "!")]
+     [:h4 "Would you like to?"]]]
+   [:div.row
+    [:div.section.actions
+     [:div.col.s12.m4
+      [:div.card-panel.teal {:on-click #(parse-option-history-link first-option)}
+       [:h5 (parse-option-history first-option)]]]
+     [:div.col.s12.m4
+      [:div.card-panel.blue {:on-click #(parse-option-history-link second-option)}
+       [:h5 (parse-option-history second-option)]]]
+     [:div.col.s12.m4
+      [:div.card-panel.yellow {:on-click #(parse-option-history-link third-option)}
+       [:h5 (parse-option-history third-option)]]]]]])
+
+(defn scaffolded-history-component []
+  [:div.history-items
+   (if-not (empty? @history-state)
+     [:div.row {:id "history"
+                :style (history-style)}
+      [:div.section
+       [:div.col.s12
+        (into [:ul.collection] (map (partial vector
+                                             :li.collection-item) @history-state))]]])
+   ])
+
+(def history-component
+  (with-meta
+    scaffolded-history-component
+    {:component-did-mount #(-> (js/$ "#history")
+                               (.scrollTop (-> (js/$ "#history")
+                                               (.prop "scrollHeight"))))}))
+
+(defn scaffolded-component []
   ;;Move these to a component that will render with component-will-mount meta descriptions
   [:div.application
-   (nav/component)
+   (nav/component nil)
    [:div.container
-    (if-not (empty? @history-state)
-      [:div.row {:id "history"
-                 :style (history-style)}
-       [:div.section
-        [:div.col.s12
-         (into [:ul.collection] (reverse (map (partial vector
-                                                       :li.collection-item) @history-state)))]]])
+    [history-component]
     [:div.divider]
-    [:div.row
-     [:div.col.s12.intro
-      [:h3 (str "Hi " (prefs-state :first-name) "!")]
-      [:h4 "Would you like to?"]]]
-    [:div.row
-     [:div.section.actions
-      [:div.col.s12.m4
-       [:div.card-panel.teal {:on-click #(parse-option-history-link first-option)}
-        [:h5 (parse-option-history first-option)]]]
-      [:div.col.s12.m4
-       [:div.card-panel.blue {:on-click #(parse-option-history-link second-option)}
-        [:h5 (parse-option-history second-option)]]]
-      [:div.col.s12.m4
-       [:div.card-panel.yellow {:on-click #(parse-option-history-link third-option)}
-        [:h5 (parse-option-history third-option)]]]]]
-    ;; [bind-fields form-template prefs]
-    ]
-   ])
+    (content-component)]])
 
 ;; Mobile like notifications
 ;; (js/toast "I am a testing toast" 4000)
+
+(defn component []
+  (reagent/create-class
+   {:component-will-mount #(do
+                             (populate-with-no-scores (map-scores-to-vec))
+                             (populate-remaining-with-lowest-scores (map-scores-to-vec)))
+    :render scaffolded-component}))

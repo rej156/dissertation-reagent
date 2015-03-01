@@ -7,9 +7,9 @@
             [re-frame.core :as re-frame]
             [test.components.nav :as nav]))
 
-(defn component []
+(defn scaffolded-component []
   [:div.goals-tab
-   (nav/component :future)
+   (nav/component :goals)
    [:div.container
     [:div.row
      [:div.col.s12
@@ -25,3 +25,10 @@
         [:div.collapsible-body
          [:p "Third"]]]]]
      ]]])
+
+(defn component []
+  (reagent/create-class
+   {:component-did-mount #(-> (js/$ ".collapsible")
+                              (.collapsible)
+                              {:accordion true})
+    :render scaffolded-component}))
