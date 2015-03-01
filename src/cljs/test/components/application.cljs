@@ -268,13 +268,6 @@
   (swap! core-values-state assoc-in [0 :career :current-goal-name] "Become a freelancer")
   (swap! core-values-state assoc-in [0 :career :current-goal] 0))
 
-(defn history-scroll-bottom []
-  (let [hist (.getElementById js/document "history")]
-    (try
-      (set! (.-scrollTop hist) (.-scrollHeight hist))
-      (catch :default e
-        (.log js/console e)))))
-
 (defn history-style []
   (if (> (count @history-state) 5)
     {:overflow "scroll"
@@ -322,7 +315,7 @@
 (defn scaffolded-component []
   ;;Move these to a component that will render with component-will-mount meta descriptions
   [:div.application
-   (nav/component nil)
+   (nav/component :main)
    [:div.container
     [history-component]
     [:div.divider]

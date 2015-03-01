@@ -12,28 +12,36 @@
     [:div.row
      [:div.col.s12
       [:ul
-       [:div.col.s3
+       [:div.col.s2
+        [(if (= tab :main)
+           :li.active
+           :li)
+         [:a {
+              :href "/#/application"
+              }
+          [:i.mdi-action-home.left] "Home"]]]
+       [:div.col.s2
         [(if (= tab :goals)
            :li.active
            :li)
          [:a {
               :href "/#/tabs/goals"
               } "Goals"]]]
-       [:div.col.s3
+       [:div.col.s2
         [(if (= tab :past)
            :li.active
            :li)
          [:a {
               :href "#"
               } "Past"]]]
-       [:div.col.s3
+       [:div.col.s2
         [(if (= tab :present)
            :li.active
            :li)
          [:a {
               :href "#"
               } "Present"]]]
-       [:div.col.s3
+       [:div.col.s2
         [(if (= tab :future)
            :li.active
            :li)
