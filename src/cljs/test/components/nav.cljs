@@ -19,7 +19,7 @@
          [:a {
               :href "/#/application"
               }
-          [:i.mdi-action-home.left] "Home"]]]
+          "Home"]]]
        [:div.col.s2
         [(if (= tab :goals)
            :li.active

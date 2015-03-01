@@ -294,7 +294,7 @@
       [:div.card-panel.yellow {:on-click #(parse-option-history-link third-option)}
        [:h5 (parse-option-history third-option)]]]]]])
 
-(defn scaffolded-history-component []
+(defn history-component []
   [:div.history-items
    (if-not (empty? @history-state)
      [:div.row {:id "history"
@@ -302,22 +302,13 @@
       [:div.section
        [:div.col.s12
         (into [:ul.collection] (map (partial vector
-                                             :li.collection-item) @history-state))]]])
-   ])
-
-(def history-component
-  (with-meta
-    scaffolded-history-component
-    {:component-did-mount #(-> (js/$ "#history")
-                               (.scrollTop (-> (js/$ "#history")
-                                               (.prop "scrollHeight"))))}))
+                                             :li.collection-item) @history-state))]]])])
 
 (defn scaffolded-component []
-  ;;Move these to a component that will render with component-will-mount meta descriptions
   [:div.application
    (nav/component :main)
    [:div.container
-    [history-component]
+    (history-component)
     [:div.divider]
     (content-component)]])
 
@@ -328,5 +319,10 @@
   (reagent/create-class
    {:component-will-mount #(do
                              (populate-with-no-scores (map-scores-to-vec))
-                             (populate-remaining-with-lowest-scores (map-scores-to-vec)))
+                             (populate-remaining-with-lowest-scores
+                              (map-scores-to-vec)))
+
+    :component-did-mount #(-> (js/$ "#history")
+                              (.scrollTop (-> (js/$ "#history")
+                                              (.prop "scrollHeight"))))
     :render scaffolded-component}))
