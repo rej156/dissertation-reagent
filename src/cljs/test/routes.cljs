@@ -96,9 +96,12 @@
     (set! steps/existing-step (js/parseInt (:existing_step query-params)))
     (global-put! :current-page :steps))
 
-(defroute "/modules/another-step" [query-params]
+  (defroute "/modules/another-step" [query-params]
     (.log js/console (pr-str "The query params are: " query-params))
     (set! application/current-option (js/parseInt (:current_option query-params)))
     (global-put! :current-page :another-step))
+
+  (defroute "/tabs/goals" []
+    (global-put! :current-page :tabs-goals))
 
   (hook-browser-navigation!))
