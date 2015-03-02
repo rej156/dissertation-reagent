@@ -67,9 +67,10 @@
                                                         (first)
                                                         (:current-goal))
                                                     :name]))
+      (set! (.-location js/window) "#/application")
       (catch :default e
         ))
-    (set! (.-location js/window) "#/application")))
+    ))
 
 
 

@@ -321,7 +321,10 @@
                              (populate-remaining-with-lowest-scores
                               (map-scores-to-vec)))
 
-    :component-did-mount #(-> (js/$ "#history")
+    :component-did-mount #(try
+                            (-> (js/$ "#history")
                               (.scrollTop (-> (js/$ "#history")
                                               (.prop "scrollHeight"))))
+                            (catch :default e
+                              ))
     :render scaffolded-component}))
