@@ -70,7 +70,10 @@
 
 (defn component []
   (reagent/create-class
-   {:component-did-mount #(-> (js/$ ".collapsible")
+   {:component-did-mount #(try
+                            (-> (js/$ ".collapsible")
                               (.collapsible)
                               {:expandable true})
+                            (catch :default e
+                              ))
     :render scaffolded-component}))
