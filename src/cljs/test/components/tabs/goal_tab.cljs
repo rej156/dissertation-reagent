@@ -32,7 +32,8 @@
    [:div.container
     [:div.row
      [:div.col.s12
-      [:ul.collapsible {:data-collapsible "expandable"}
+      [:ul.collapsible {:data-collapsible "expandable"
+                        :id "expandable"}
        [:li
         [:div.collapsible-header
          [:i.large.mdi-content-add.left] [:h5 "Career"]]
