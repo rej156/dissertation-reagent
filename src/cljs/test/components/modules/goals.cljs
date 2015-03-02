@@ -46,11 +46,10 @@
            [application/current-option (keyword (application/option-name
                                                  application/current-option)) :current-goal-name] (:name @goal-atom))
     (catch :default e
-      ))
-  )
+      )))
 
 (defn commit-goal-option [option]
-  (if-not (nil? option)
+  (if-not (nil? application/current-option)
     (try
       (swap! application/core-values-state assoc-in
              [application/current-option (keyword (application/option-name
@@ -58,17 +57,21 @@
       (swap! application/core-values-state assoc-in [application/current-option (keyword (application/option-name
                                                                                           application/current-option))
                                                      :current-goal-name]
-             (get-in application/core-values-state [application/current-option
-  (keyword (application/option-name application/current-option :goals (-> (get
-                                                                           @application/core-values-state application/current-option)
-                                                                          (vals)
-                                                                          (first)
-                                                                          (:current-goal))))
-  :name])
-             )
+             (get-in application/core-values-state [application/current-option (keyword
+                                                                                (application/option-name
+                                                                                 application/current-option))
+                                                    :goals
+                                                    (-> (get
+                                                         @application/core-values-state application/current-option)
+                                                        (vals)
+                                                        (first)
+                                                        (:current-goal))
+                                                    :name]))
       (catch :default e
         ))
     (set! (.-location js/window) "#/application")))
+
+
 
 (defn reset-goal-atom []
   (reset! goal-atom {}))

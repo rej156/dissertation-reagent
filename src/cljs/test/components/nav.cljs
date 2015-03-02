@@ -4,7 +4,7 @@
             [secretary.core :as secretary]
             [instaparse.core :as insta]
             [reagent-forms.core :refer [bind-fields]]
-            [re-frame.core :as re-frame]))
+            ))
 
 (defn component [tab]
   [:nav
