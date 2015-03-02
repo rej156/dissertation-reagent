@@ -30,47 +30,36 @@
                   (first)
                   (:history)) "c"))
   (swap! application/history-state conj (str "Added goal: "
-                                               (str/capitalize
-                                                (str (:name @goal-atom))))))
+                                             (str/capitalize
+                                              (str (:name @goal-atom))))))
 
 (defn commit-goal []
-  (try
-    (swap! application/core-values-state assoc-in [application/current-option (keyword (application/option-name
-                                                                                        application/current-option))
-                                                   :current-goal]
-           (- (count (-> (get @application/core-values-state application/current-option)
-                         (vals)
-                         (first)
-                         (:goals))) 1))
-    (swap! application/core-values-state assoc-in
-           [application/current-option (keyword (application/option-name
-                                                 application/current-option)) :current-goal-name] (:name @goal-atom))
-    (catch :default e
-      )))
+  (swap! application/core-values-state assoc-in [application/current-option (keyword (application/option-name
+                                                                                      application/current-option))
+                                                 :current-goal]
+         (- (count (-> (get @application/core-values-state application/current-option)
+                       (vals)
+                       (first)
+                       (:goals))) 1))
+  (swap! application/core-values-state assoc-in
+         [application/current-option (keyword (application/option-name
+                                               application/current-option)) :current-goal-name] (:name @goal-atom))
+  )
 
 (defn commit-goal-option [option]
-  (if-not (nil? option)
-    (try
-      (swap! application/core-values-state assoc-in
-             [application/current-option (keyword (application/option-name
-                                                   application/current-option)) :current-goal] option)
-      (swap! application/core-values-state assoc-in [application/current-option (keyword (application/option-name
-                                                                                          application/current-option))
-                                                     :current-goal-name]
-             (get-in application/core-values-state [application/current-option (keyword
-                                                                                (application/option-name
-                                                                                 application/current-option))
-                                                    :goals
-                                                    (-> (get
-                                                         @application/core-values-state application/current-option)
-                                                        (vals)
-                                                        (first)
-                                                        (:current-goal))
-                                                    :name]))
-      (set! (.-location js/window) "#/application")
-      (catch :default e
-        ))
-    ))
+  (swap! application/core-values-state assoc-in
+         [application/current-option (keyword (application/option-name
+                                               application/current-option)) :current-goal] option)
+  (swap! application/core-values-state assoc-in
+         [application/current-option (keyword (application/option-name
+                                               application/current-option))
+          :current-goal-name] (-> (get (-> (get @application/core-values-state
+                                                application/current-option)
+                                           (vals)
+                                           (first)
+                                           (:goals)) option)
+                                  (:name)))
+  (set! (.-location js/window) "#/application"))
 
 
 
