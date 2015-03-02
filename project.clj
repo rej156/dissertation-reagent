@@ -6,14 +6,15 @@
 
   :source-paths ["src/clj" "src/cljs"]
 
-  :dependencies [[org.clojure/clojure "1.6.0"]
-                 [org.clojure/clojurescript "0.0-2511" :scope "provided"]
+  :dependencies [
+                 [org.clojure/clojure "1.6.0"]
+                 [org.clojure/clojurescript "0.0-2913"]
+                 [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                  [ring "1.3.2"]
                  [compojure "1.3.1"]
                  [enlive "1.1.5"]
                  [figwheel "0.1.4-SNAPSHOT"]
                  [environ "1.0.0"]
-                 [com.cemerick/piggieback "0.1.3"]
                  [weasel "0.4.2"]
                  [reagent "0.5.0-alpha"]
                  [reagent-forms "0.4.3"]
@@ -43,6 +44,9 @@
 
                    :plugins [[lein-figwheel "0.1.4-SNAPSHOT"]]
 
+                   :dependencies [
+                                  [com.cemerick/piggieback "0.1.5"]
+                                  ]
                    :figwheel {:http-server-root "public"
                               :port 3449
                               :css-dirs ["resources/public/css"]}

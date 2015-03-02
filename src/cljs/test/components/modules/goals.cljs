@@ -49,7 +49,7 @@
       )))
 
 (defn commit-goal-option [option]
-  (if-not (nil? application/current-option)
+  (if-not (nil? option)
     (try
       (swap! application/core-values-state assoc-in
              [application/current-option (keyword (application/option-name
