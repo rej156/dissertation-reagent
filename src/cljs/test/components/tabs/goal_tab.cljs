@@ -1,4 +1,4 @@
-(ns test.components.tabs.goals
+(ns test.components.tabs.goal-tab
   (:require [test.session :refer [global-put! global-state prefs-state prefs merge-atoms]]
             [reagent.core :as reagent :refer [atom]]
             [secretary.core :as secretary]

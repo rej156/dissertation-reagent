@@ -9,11 +9,7 @@
 (defn input [label type id alert]
   [:div.input-field.col.s12
    [:input {:field type :id id}]
-   [:label {:for "first_name"} label]
-   ;; [:div.alert.alert-danger
-   ;;  {:field :alert :id id :event empty?}
-   ;;  alert]
-   ])
+   [:label {:for "first_name"} label]])
 
 (def form-template
   [:div.container

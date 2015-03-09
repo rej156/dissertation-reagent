@@ -25,7 +25,7 @@
             [test.components.modules.another-goal :as another-goal]
             [test.components.modules.steps :as steps]
             [test.components.modules.another-step :as another-step]
-            [test.components.tabs.goals :as tabs-goals]))
+            [test.components.tabs.goal-tab :as goal-tab]))
 
 (defn page []
   (condp = (global-state :current-page)
@@ -50,4 +50,4 @@
     :another-goal another-goal/component
     :steps steps/component
     :another-step another-step/component
-    :tabs-goals tabs-goals/component))
+    :tabs-goals goal-tab/component))

@@ -15,19 +15,19 @@
                  [environ "1.0.0"]
                  [com.cemerick/piggieback "0.1.3"]
                  [weasel "0.4.2"]
-                 [reagent "0.5.0-alpha3"]
+                 [reagent "0.5.0-alpha"]
                  [reagent-forms "0.4.3"]
                  [secretary "1.2.1"]
                  [alandipert/storage-atom "1.2.3"]
-                 [leiningen "2.5.0"]
-                 [com.lucasbradstreet/instaparse-cljs "1.3.4.2"]]
+                 [leiningen "2.5.1"]
+                 [com.lucasbradstreet/instaparse-cljs "1.3.5"]]
 
-  :plugins [[lein-cljsbuild "1.0.3"]
+  :plugins [[lein-cljsbuild "1.0.4"]
             [cider/cider-nrepl "0.9.0-SNAPSHOT"]
             [lein-ancient "0.6.0-SNAPSHOT"]
             [lein-environ "1.0.0"]]
 
-  :min-lein-version "2.5.0"
+  :min-lein-version "2.5.1"
 
   :uberjar-name "test.jar"
 

@@ -15,7 +15,7 @@
    [:div.row
     [:div.col.s12
      [:h2 (str "Your mood is " (get-in @prefs [:mood :score]) " on a scale between -18 and +18")]]]
-   (if (<= (get-in @prefs [:mood :score]) 0)
+   (if (>= (get-in @prefs [:mood :score]) 0)
      [:div.row
       [:div.mood-good
        [:h3  "Looks like your mood is good!"]
