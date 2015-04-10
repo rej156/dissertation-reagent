@@ -3,11 +3,15 @@
             [reagent.core :as reagent :refer [atom]]
             [secretary.core :as secretary]
             [test.components.introduction.mood-assessment :as assessment]
+            [test.components.application :refer [core-values-state]]
+            [test.components.modules.gratitude :refer [gratitude-log]]
             [reagent-forms.core :refer [bind-fields]]))
 
 (def gratitude (atom {}))
 
 (defn try-move-next []
+  (swap! gratitude-log update-in [:gratitude-log]
+         conj @gratitude)
   (set! (.-location js/window) "#/application"))
 
 (defn component []
