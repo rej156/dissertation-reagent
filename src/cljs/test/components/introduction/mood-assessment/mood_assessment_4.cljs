@@ -9,7 +9,7 @@
   (do
     (set! (.-location js/window) "#/introduction/mood-evaluation")
     (swap! prefs assoc-in [:mood :score]
-           (- 24 (reduce + (vals (prefs-state :mood)))))))
+           (- (reduce + (vals (prefs-state :mood))) 24))))
 
 (defn input [id label]
   [:div.input-field.col.s12
