@@ -13,6 +13,7 @@
   (swap! gratitude-log update-in [:gratitude-log]
          conj @gratitude)
   (swap! gratitude-log assoc-in [:mood-counter :show-status] 0)
+  (reset! gratitude {})
   (set! (.-location js/window) "#/application"))
 
 (defn component []
