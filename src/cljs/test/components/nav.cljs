@@ -47,5 +47,12 @@
            :li)
          [:a {
               :href "#"
-              } "Future"]]]]]]
+              } "Future"]]]
+       [:div.col.s2
+        [(if (= tab :gratitude)
+           :li.active
+           :li)
+         [:a {
+              :href "#/tabs/gratitude"
+              } "Gratitude"]]]]]]
     ]])

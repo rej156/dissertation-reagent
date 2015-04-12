@@ -52,7 +52,7 @@
                                            :cols 50}]
           [:h4 {:for :grateful-reason} "Why are you grateful for it?"]
           [:textarea.materialize-textarea {:id :grateful-reason
-                                           :on-change #(swap! gratitude assoc :gratitude-text (.. % -target -value))
+                                           :on-change #(swap! gratitude assoc :gratitude-description (.. % -target -value))
                                            :rows 4
                                            :cols 50}]
           [:br]
