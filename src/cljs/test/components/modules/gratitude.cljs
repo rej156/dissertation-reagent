@@ -3,8 +3,6 @@
             [reagent.core :as reagent :refer [atom]]
             [secretary.core :as secretary]
             [alandipert.storage-atom :refer [local-storage]]
-            [test.components.introduction.mood-assessment :as assessment]
-            [test.components.application :refer [core-values-state]]
             [reagent-forms.core :refer [bind-fields]]))
 
 (defonce gratitude-log (local-storage (atom {:mood-counter {:show-status 0
