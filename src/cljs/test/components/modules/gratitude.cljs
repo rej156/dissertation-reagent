@@ -7,4 +7,6 @@
             [test.components.application :refer [core-values-state]]
             [reagent-forms.core :refer [bind-fields]]))
 
-(defonce gratitude-log (local-storage (atom {:gratitude-log []}) :gratitude))
+(defonce gratitude-log (local-storage (atom {:mood-counter {:show-status 0
+                                                            :time 0}
+                                             :gratitude-log []}) :gratitude))

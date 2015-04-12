@@ -4,7 +4,8 @@
             [secretary.core :as secretary]
             [instaparse.core :as insta]
             [reagent-forms.core :refer [bind-fields]]
-            [test.components.nav :as nav]))
+            [test.components.nav :as nav]
+            [test.components.modules.gratitude :refer [gratitude-log]]))
 
 (defn input [label type id]
   [:div.id
@@ -291,7 +292,12 @@
        [:h5 (parse-option-history second-option)]]]
      [:div.col.s12.m4
       [:div.card-panel.yellow {:on-click #(parse-option-history-link third-option)}
-       [:h5 (parse-option-history third-option)]]]]]])
+       [:h5 (parse-option-history third-option)]]]
+     (when (= (get-in @gratitude-log [:mood-counter :show-status]) 1)
+       [:div.col.s12.m4
+        [:div.card-panel.red {:on-click #(set! (.-location js/window) "#/introduction/mood-assessment-initial")}
+         [:h5 "Assess your mood"]]])
+     ]]])
 
 (defn history-component []
   [:div.history-items
@@ -323,8 +329,8 @@
 
     :component-did-mount #(try
                             (-> (js/$ "#history")
-                              (.scrollTop (-> (js/$ "#history")
-                                              (.prop "scrollHeight"))))
+                                (.scrollTop (-> (js/$ "#history")
+                                                (.prop "scrollHeight"))))
                             (catch :default e
                               ))
     :render scaffolded-component}))
