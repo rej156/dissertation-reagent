@@ -14,14 +14,16 @@
     [:div.divider]
     (for [goal (get-in @application/core-values-state [option option-name
                                                        :goals])]
-      [:li {:key (str goal)}
+      ^{:key goal}
+      [:li
        [:div.collapsible-header [:b (str (:name goal))]]
        [:div.collapsible-body [:p (str (:description goal))]]])
     [:li [:h5 "Completed Goals"]]
     [:div.divider]
     (for [completed-goal (get-in @application/core-values-state [option option-name
                                                        :completed-goals])]
-      [:li {:key (str completed-goal)}
+      ^{:key completed-goal}
+      [:li
        [:div.collapsible-header [:b (str (:name completed-goal))]]
        [:div.collapsible-body [:p (str (:description completed-goal))]]])
     ]])
