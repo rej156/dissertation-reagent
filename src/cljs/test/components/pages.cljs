@@ -26,7 +26,8 @@
             [test.components.modules.steps :as steps]
             [test.components.modules.another-step :as another-step]
             [test.components.tabs.goal-tab :as goal-tab]
-            [test.components.tabs.gratitude-tab :as gratitude-tab]))
+            [test.components.tabs.gratitude-tab :as gratitude-tab]
+            [test.components.tabs.vision-tab :as vision-tab]))
 
 (defn page []
   (condp = (global-state :current-page)
@@ -52,4 +53,5 @@
     :steps steps/component
     :another-step another-step/component
     :tabs-goals goal-tab/component
-    :tabs-gratitude gratitude-tab/component))
+    :tabs-gratitude gratitude-tab/component
+    :tabs-visions vision-tab/component))

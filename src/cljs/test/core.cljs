@@ -12,6 +12,7 @@
 (defn page-component []
   (reagent/create-class {:component-will-mount (do
                                                  (routes/app-routes)
+                                                 (.initializeTouchEvents js/React true)
                                                  (.log js/console "mounted!")
                                                  )
                          :render page-render}))

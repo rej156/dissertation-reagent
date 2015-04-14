@@ -28,12 +28,12 @@
               :href "/#/tabs/goals"
               } "Goals"]]]
        [:div.col.s2
-        [(if (= tab :past)
+        [(if (= tab :visions)
            :li.active
            :li)
          [:a {
-              :href "#"
-              } "Past"]]]
+              :href "#/tabs/visions"
+              } "Visions"]]]
        [:div.col.s2
         [(if (= tab :present)
            :li.active

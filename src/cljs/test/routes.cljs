@@ -107,4 +107,7 @@
   (defroute "/tabs/gratitude" []
     (global-put! :current-page :tabs-gratitude))
 
+  (defroute "/tabs/visions" []
+    (global-put! :current-page :tabs-visions))
+
   (hook-browser-navigation!))
