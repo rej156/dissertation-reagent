@@ -14,19 +14,16 @@
    [:div.container
     [:div.row
      [:div.col.s12
-      [:h4 "Gratitude Reasons"]]]
+      [:h4.center "Gratitude Reasons"]]]
     [:div.row
      [:div.col.s12
-      [:ul.collapsible.popout {:data-collapsible "accordion"
-                        :id "accordion"}
-       (for [entry (:gratitude-log @gratitude-log)]
-         ^{:key entry}
-         [:li
-          [:div.collapsible-header
-           [:i.large.mdi-content-add.left] [:h5 (str (:gratitude-reason entry))]]
-          [:div.collapsible-body
-           [:p (str (:gratitude-description entry))]]])
-       ]]
+      (for [entry (:gratitude-log @gratitude-log)]
+        ^{:key entry}
+        [:div.card.col.s6
+         [:div.card-content
+          [:p.card-title (str (:gratitude-reason entry))]
+          [:p (str (:gratitude-description entry))]]
+         ])]
      ]]])
 
 (defn component []
