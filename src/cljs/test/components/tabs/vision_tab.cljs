@@ -10,7 +10,6 @@
 
 (defn vision-item [option]
   (let [editing (atom false)]
-    (.log js/console @editing)
     (fn []
       (if-not (clojure.string/blank? (get-in @application/core-values-state
   [option (keyword (application/option-name option)) :vision]))
@@ -58,43 +57,43 @@
         [:div.collapsible-header
          [:i.large.mdi-content-add.left] [:h5 "Finances"]]
         [:div.collapsible-body
-         [:h1 "lol"]]
+         [vision-item 1]]
         ]
        [:li
         [:div.collapsible-header
          [:i.large.mdi-content-add.left] [:h5 "Health"]]
         [:div.collapsible-body
-         [:h1 "lol"]]
+         [vision-item 2]]
         ]
        [:li
         [:div.collapsible-header
          [:i.large.mdi-content-add.left] [:h5 "Family"]]
         [:div.collapsible-body
-         [:h1 "lol"]]
+         [vision-item 3]]
         ]
        [:li
         [:div.collapsible-header
          [:i.large.mdi-content-add.left] [:h5 "Romance"]]
         [:div.collapsible-body
-         [:h1 "lol"]]
+         [vision-item 4]]
         ]
        [:li
         [:div.collapsible-header
          [:i.large.mdi-content-add.left] [:h5 "Personal Growth"]]
         [:div.collapsible-body
-         [:h1 "lol"]]
+         [vision-item 5]]
         ]
        [:li
         [:div.collapsible-header
          [:i.large.mdi-content-add.left] [:h5 "Fun"]]
         [:div.collapsible-body
-         [:h1 "lol"]]
+         [vision-item 6]]
         ]
        [:li
         [:div.collapsible-header
          [:i.large.mdi-content-add.left] [:h5 "Physical Environment"]]
         [:div.collapsible-body
-         [:h1 "lol"]]
+         [vision-item 7]]
         ]
        ]]]]])
 
