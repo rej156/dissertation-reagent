@@ -6,7 +6,8 @@
             [goog.history.EventType :as EventType]
             [test.components.application :as application]
             [test.components.modules.goals :as goals]
-            [test.components.modules.steps :as steps])
+            [test.components.modules.steps :as steps]
+            [test.components.modules.edit-goals :as edit-goals])
   (:import goog.History))
 
 ;; ----------
@@ -109,5 +110,11 @@
 
   (defroute "/tabs/visions" []
     (global-put! :current-page :tabs-visions))
+
+  (defroute "/modules/edit-goal" [query-params]
+    (.log js/console (pr-str "The query params are: " query-params))
+    (set! application/current-option (js/parseInt (:current_option query-params)))
+    (set! edit-goals/current-goal (js/parseInt (:current_goal query-params)))
+    (global-put! :current-page :edit-goals))
 
   (hook-browser-navigation!))

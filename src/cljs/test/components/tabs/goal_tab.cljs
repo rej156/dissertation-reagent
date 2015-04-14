@@ -7,21 +7,34 @@
             [test.components.nav :as nav]
             [test.components.application :as application]))
 
+(defn edit-this-goal [current-option current-goal]
+  (set! (.-location js/window) (str "#/modules/edit-goal?current-option="
+                                    current-option "&current-goal=" current-goal)))
+
 (defn option-goal-content [option option-name]
   [:div.collapsible-body
    [:ol.collapsible {:data-collapsible "accordion"}
     [:li [:h5 "Progressing Goals"]]
     [:div.divider]
-    (for [goal (get-in @application/core-values-state [option option-name
-                                                       :goals])]
-      ^{:key goal}
-      [:li
-       [:div.collapsible-header [:b (str (:name goal))]]
-       [:div.collapsible-body [:p (str (:description goal))]]])
+
+    (let [counter (atom 0)]
+      (for [goal (get-in @application/core-values-state [option option-name
+                                                         :goals])]
+        ^{:key goal}
+        [:li
+         [:div.collapsible-header
+          [:b (str (:name goal))]
+          [:i.mdi-editor-border-color.small.right {:on-click #(edit-this-goal
+                                                               option (-
+      @counter 1))}]]
+         [:div.collapsible-body [:p (str (:description goal))]]
+         [:div.increment {:style {:display "none"}}
+          (swap! counter inc)]]))
+
     [:li [:h5 "Completed Goals"]]
     [:div.divider]
     (for [completed-goal (get-in @application/core-values-state [option option-name
-                                                       :completed-goals])]
+                                                                 :completed-goals])]
       ^{:key completed-goal}
       [:li
        [:div.collapsible-header
@@ -38,7 +51,7 @@
      [:div.col.s12
       [:h4.center "Goals log"]
       [:ul.collapsible.popout {:data-collapsible "expandable"
-                        :id "expandable"}
+                               :id "expandable"}
        [:li
         [:div.collapsible-header
          [:i.large.mdi-content-add.left] [:h5 "Career"]]
@@ -78,8 +91,8 @@
   (reagent/create-class
    {:component-did-mount #(try
                             (-> (js/$ ".collapsible")
-                              (.collapsible)
-                              {:expandable true})
+                                (.collapsible)
+                                {:expandable true})
                             (catch :default e
                               ))
     :render scaffolded-component}))
