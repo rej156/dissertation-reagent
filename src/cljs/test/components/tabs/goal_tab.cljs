@@ -24,7 +24,9 @@
                                                        :completed-goals])]
       ^{:key completed-goal}
       [:li
-       [:div.collapsible-header [:b (str (:name completed-goal))]]
+       [:div.collapsible-header
+        [:b (str (:name completed-goal))]
+        ]
        [:div.collapsible-body [:p (str (:description completed-goal))]]])
     ]])
 
