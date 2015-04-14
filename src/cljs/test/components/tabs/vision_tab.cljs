@@ -45,7 +45,7 @@
     [:div.row
      [:div.col.s12
       [:h4.center "Visions log"]
-      [:ul.collapsible.popout {:data-collapsible "expandable"
+      [:ul.collapsible {:data-collapsible "expandable"
                         :id "expandable"}
        [:li
         [:div.collapsible-header

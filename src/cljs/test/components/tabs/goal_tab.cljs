@@ -37,7 +37,7 @@
     [:div.row
      [:div.col.s12
       [:h4.center "Goals log"]
-      [:ul.collapsible {:data-collapsible "expandable"
+      [:ul.collapsible.popout {:data-collapsible "expandable"
                         :id "expandable"}
        [:li
         [:div.collapsible-header
