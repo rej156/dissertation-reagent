@@ -266,7 +266,10 @@
   (swap! core-values-state assoc-in [0 :career :vision] "Be able to work on
   your own projects with an inspiring vision.")
   (swap! core-values-state assoc-in [0 :career :current-goal-name] "Become a freelancer")
-  (swap! core-values-state assoc-in [0 :career :current-goal] 0))
+  (swap! core-values-state assoc-in [0 :career :current-goal] 0)
+  (swap! core-values-state assoc-in [0 :career :goals 0 :steps] [{:step "Get a
+  job with Juxt.pro!"}])
+  (swap! core-values-state update-in [0 :career :goals 0 :steps] conj {:step "Second step"}))
 
 (defn history-style []
   (if (> (count @history-state) 5)

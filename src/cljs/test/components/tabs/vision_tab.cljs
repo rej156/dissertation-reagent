@@ -12,30 +12,29 @@
   (let [editing (atom false)]
     (fn []
       (if-not (clojure.string/blank? (get-in @application/core-values-state
-  [option (keyword (application/option-name option)) :vision]))
-          (if-not @editing
-        [:div.not-editing
-         [:p (get-in @application/core-values-state [option (keyword
-                                                             (application/option-name option)) :vision])
-          [:i.mdi-editor-border-color.small.right {:on-click #(do (reset!
-                                                                   editing true)
-                                                                  (.preventDefault
-                                                                   %)
-                                                                  )}]]]
-        [:div.editing
-         [:div.col.s11
-          [:input {:type "text"
-                   :value (str (get-in @application/core-values-state [option
-                                                                       (keyword (application/option-name option)) :vision]))
-                   :on-change #(swap! application/core-values-state assoc-in [option
-                                                                              (keyword
-                                                                               (application/option-name option))
-                                                                              :vision] (-> % .-target .-value))}]]
-         [:div.col.s1
-          [:p.right {:on-click #(do (reset! editing false)
-                                    (.preventDefault %))} "Save"]]
-         ])
-          [:h5.center {:on-click #(set! (.-location js/window) (str "#/modules/visions?current_option=" option))} "Add a vision!"]))
+                                             [option (keyword (application/option-name option)) :vision]))
+        (if-not @editing
+          [:div.not-editing
+           [:p (get-in @application/core-values-state [option (keyword
+                                                               (application/option-name option)) :vision])
+            [:i.mdi-editor-border-color.small.right {:on-click #(do (reset! editing true)
+                                                                    (.preventDefault
+                                                                     %)
+                                                                    )}]]]
+          [:div.editing
+           [:div.col.s11
+            [:input {:type "text"
+                     :value (str (get-in @application/core-values-state [option
+                                                                         (keyword (application/option-name option)) :vision]))
+                     :on-change #(swap! application/core-values-state assoc-in [option
+                                                                                (keyword
+                                                                                 (application/option-name option))
+                                                                                :vision] (-> % .-target .-value))}]]
+           [:div.col.s1
+            [:p.right {:on-click #(do (reset! editing false)
+                                      (.preventDefault %))} "Save"]]
+           ])
+        [:h5.center {:on-click #(set! (.-location js/window) (str "#/modules/visions?current_option=" option))} "Add a vision!"]))
     ))
 
 (defn scaffolded-component []

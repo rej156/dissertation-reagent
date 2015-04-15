@@ -8,8 +8,8 @@
             [test.components.application :as application]))
 
 (defn edit-this-goal [current-option current-goal]
-  (set! (.-location js/window) (str "#/modules/edit-goal?current-option="
-                                    current-option "&current-goal=" current-goal)))
+  (str "#/modules/edit-goal?current-option="
+       current-option "&current-goal=" current-goal))
 
 (defn option-goal-content [option option-name]
   [:div.collapsible-body
@@ -24,12 +24,11 @@
         [:li
          [:div.collapsible-header
           [:b (str (:name goal))]
-          [:i.mdi-editor-border-color.small.right {:on-click #(edit-this-goal
-                                                               option (-
-      @counter 1))}]]
+          [:a {:href (edit-this-goal option @counter)} [:i.mdi-editor-border-color.small.right]]
+          ]
          [:div.collapsible-body [:p (str (:description goal))]]
-         [:div.increment {:style {:display "none"}}
-          (swap! counter inc)]]))
+         [:div.counter {:style {:display "none"}} (swap! counter inc)]]))
+    ;; Counter inc bug
 
     [:li [:h5 "Completed Goals"]]
     [:div.divider]

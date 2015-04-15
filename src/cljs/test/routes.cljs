@@ -113,8 +113,9 @@
 
   (defroute "/modules/edit-goal" [query-params]
     (.log js/console (pr-str "The query params are: " query-params))
-    (set! application/current-option (js/parseInt (:current_option query-params)))
-    (set! edit-goals/current-goal (js/parseInt (:current_goal query-params)))
+    (set! application/current-option (js/parseInt (:current-option query-params)))
+    (set! edit-goals/current-goal (js/parseInt (:current-goal query-params)))
+    (.log js/console edit-goals/current-goal)
     (global-put! :current-page :edit-goals))
 
   (hook-browser-navigation!))
