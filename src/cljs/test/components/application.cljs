@@ -230,8 +230,34 @@
       :S (set! (.-location js/window) (str "#/modules/scores?current_option=" option))
       (final-parsing-link (initial-parsed-option-history option) option))))
 
-(defn setup-mood []
-  (swap! gratitude-log assoc-in [:mood-counter :show-status] 1))
+(defn setup-firstname []
+  (swap! prefs assoc :first-name "John"))
+
+(defn setup-lastname []
+  (swap! prefs assoc :last-name "Doe")
+  (swap! prefs assoc :gender "Male")
+  (swap! prefs assoc :age 30)
+  (swap! prefs assoc :relationship-status "Single")
+  (swap! prefs assoc :children "No"))
+
+(defn setup-services []
+  (swap! prefs assoc-in [:coaching-goals :clarity] true)
+  (swap! prefs assoc-in [:coaching-goals :stress] true))
+
+(defn setup-lowmood []
+  (swap! prefs assoc-in [:mood :happy] 1)
+  (swap! prefs assoc-in [:mood :confidence] 1)
+  (swap! prefs assoc-in [:mood :cheerfulness] 1)
+  (swap! prefs assoc-in [:mood :proudness] 1)
+  (swap! prefs assoc-in [:mood :easygoing] 1)
+  (swap! prefs assoc-in [:mood :assured] 1))
+
+;;Ask to setup gratitude manually
+;;Ask how better does John Doe feel already?
+
+;; Ask them to test scoring the rest of the options to show that the finite
+;; state machine works
+;; Then override with pre-populated data in other tabs after setting up steps
 
 (defn setup-visions []
   (loop [current @core-values-state
@@ -240,11 +266,10 @@
       (swap! core-values-state assoc-in [counter (first (keys (first current)))
                                          :history] "a")
       (swap! core-values-state assoc-in [counter (first (keys (first current)))
-                                         :score] 5)
+                                         :score] 1)
       (recur (rest current) (inc counter)))))
 
 (defn setup-goals []
-  (swap! core-values-state assoc-in [0 :career :score] 5)
   (swap! core-values-state assoc-in [0 :career :history] "abc")
   (swap! core-values-state assoc-in [0 :career :goals] [{:name "Become an
   expert in your field"
@@ -253,6 +278,11 @@
                                                         {:name "Become a freelancer"
                                                          :description "Remote
   Clojure Worker"}]))
+
+;; Mood is low now! He cba to do anything!
+
+(defn setup-mood []
+  (swap! gratitude-log assoc-in [:mood-counter :show-status] 1))
 
 (defn setup-steps []
   (setup-visions)
