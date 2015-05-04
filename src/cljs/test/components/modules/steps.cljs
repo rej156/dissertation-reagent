@@ -5,7 +5,8 @@
             [instaparse.core :as insta]
             [reagent-forms.core :refer [bind-fields]]
             [test.components.application :as application]
-            [test.components.modules.goals :as goals]))
+            [test.components.modules.goals :as goals]
+            [clojure.string :as str]))
 
 (def existing-step nil)
 
@@ -57,7 +58,14 @@
          (str (-> (get @application/core-values-state application/current-option)
                   (vals)
                   (first)
-                  (:history)) "d")))
+                  (:history)) "d"))
+  (swap! application/history-state conj (str "Added Baby step in "
+                                             (str/capitalize
+                                              (str (application/option-name
+                                                    application/current-option)))
+                                             ": "
+                                             (str/capitalize
+                                              (str (:step @step-atom))))))
 
 (defn drop-nth
   [pos coll]

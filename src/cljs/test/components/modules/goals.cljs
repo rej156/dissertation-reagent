@@ -29,7 +29,10 @@
                   (vals)
                   (first)
                   (:history)) "c"))
-  (swap! application/history-state conj (str "Added goal: "
+  (swap! application/history-state conj (str "Added Goal for "
+                                             (str/capitalize
+                                              (application/option-name application/current-option))
+                                             ": "
                                              (str/capitalize
                                               (str (:name @goal-atom))))))
 

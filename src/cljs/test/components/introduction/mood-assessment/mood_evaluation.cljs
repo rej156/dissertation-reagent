@@ -20,7 +20,7 @@
       (.openModal)))
 
 (defn try-move-next []
-  (if (every? empty (get-in @gratitude-log [:gratitude-log]))
+  (if-not (empty? @gratitude)
     (swap! gratitude-log update-in [:gratitude-log]
          conj @gratitude))
   (swap! gratitude-log assoc-in [:mood-counter :show-status] 0)
