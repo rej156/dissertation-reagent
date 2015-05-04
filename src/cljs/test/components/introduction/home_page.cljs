@@ -25,4 +25,6 @@
 
 (defn component []
   [:div.home-page
-   [bind-fields form-template prefs]])
+   [bind-fields form-template prefs]
+   (if (= 1 (prefs-state :entered-main))
+     (set! (.-location js/window) "#/application"))])

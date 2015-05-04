@@ -1,5 +1,6 @@
 (ns test.components.application
   (:require [test.session :refer [global-put! global-state prefs-state prefs merge-atoms]]
+            [alandipert.storage-atom :refer [local-storage]]
             [reagent.core :as reagent :refer [atom]]
             [secretary.core :as secretary]
             [instaparse.core :as insta]
@@ -29,7 +30,7 @@
    })
 
 
-(defonce core-values-state (atom [
+(defonce core-values-state (local-storage (atom [
                                   {:career core-value-content}
                                   {:finances core-value-content}
                                   {:health core-value-content}
@@ -38,9 +39,10 @@
                                   {:personal-growth core-value-content}
                                   {:fun core-value-content}
                                   {:physical-environment core-value-content}
-                                  ]))
+                                  ])
+                                          :core))
 
-(defonce history-state (atom []))
+(defonce history-state (local-storage (atom []) :history))
 
 (def first-option nil)
 (def second-option nil)

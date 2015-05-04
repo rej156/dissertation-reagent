@@ -20,11 +20,13 @@
       (.openModal)))
 
 (defn try-move-next []
-  (swap! gratitude-log update-in [:gratitude-log]
-         conj @gratitude)
+  (if (every? empty (get-in @gratitude-log [:gratitude-log]))
+    (swap! gratitude-log update-in [:gratitude-log]
+         conj @gratitude))
   (swap! gratitude-log assoc-in [:mood-counter :show-status] 0)
   (reset! gratitude {})
   (close-intervention-modal)
+  (swap! prefs assoc :entered-main 1)
   (set! (.-location js/window) "#/application"))
 
 (defn ppi-modal []
@@ -54,9 +56,12 @@
      [:div.row
       [:div.mood-good
        [:h3  "Looks like your mood is good!"]
-       [:button.btn.waves-effect.waves-light {:on-click #(set! (.-location
-                                                                js/window)
-                                                               "#/application")}
+       [:button.btn.waves-effect.waves-light {:on-click #(do (swap! prefs assoc
+                                                                    :entered-main
+                                                                    1)
+                                                             (set! (.-location
+                                                                    js/window)
+                                                                   "#/application"))}
         "Let's start improving my life Liz!" [:i.mdi-content-send.right]]]
       ]
      [:div.row
