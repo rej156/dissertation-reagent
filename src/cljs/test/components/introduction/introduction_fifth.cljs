@@ -8,8 +8,9 @@
    [:div.input-field.col.s12
     [:input {:field type :id id}]
     [:label {:for id} label]
+    [:strong {:field :alert :id id :event (if (= type :text) empty? nil?)} alert]
     ;; [:div.alert.alert-danger
-    ;;  {:field :alert :id id :event (if (= type :text) empty? nil?)}
+    ;;  {:field :alert :id id :event }
     ;;  alert]
     ]])
 
@@ -33,11 +34,12 @@
 (def form-template
   [:div.row
    [:div.col.s12
-    (input "What is your last name?" :text :last-name "Last name is empty!")
+    (input "What is your last name?" :text :last-name "Please enter your last name!")
     (label "gender" "Are you a man or a woman?")
     (radio "Male" :gender "Male")
     (radio "Female" :gender "Female")
-    (input "How old are you?" :numeric :age "You haven't chosen an age!")
+    [:strong {:field :alert :id :gender :event nil?} "Please choose your gender!"]
+    (input "How old are you?" :numeric :age "Please enter your age!")
     (select "Please select relationship status" :relationship-status ["Married" "Single"])
     (label "children" "Do you have children?")
     (radio "Yes" :children "Yes")
@@ -50,7 +52,7 @@
 (defn try-move-next []
   (when-not (and
              (empty? (prefs-state :last-name))
-             (empty? (or (prefs-state :Married) (prefs-state :Single))))
+             (nil? (prefs-state :age)))
     (set! (.-location js/window) "#/introduction/sixth")))
 
 (defn component []

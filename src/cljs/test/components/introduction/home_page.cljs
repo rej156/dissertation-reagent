@@ -17,6 +17,8 @@
     [:h1 "I'm Liz."]
     [:h2 "What is your name?*"]
     (input "First Name" :text :first-name "First name is empty!")
+    [:strong {:field :alert :id :first-name :event empty?} "Please enter your
+  first name!"]
     [:br]
     [:button.btn.waves-effect.waves-light {:on-click #(try-move-next)} "Continue"]
     ]])

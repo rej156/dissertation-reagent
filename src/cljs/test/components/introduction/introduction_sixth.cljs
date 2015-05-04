@@ -13,7 +13,9 @@
    ])
 
 (defn try-move-next []
-  (set! (.-location js/window) "#/introduction/seventh"))
+  (when-not
+      (empty? (prefs-state :coaching-goals))
+    (set! (.-location js/window) "#/introduction/seventh")))
 
 (def form-template
   [:div.row
@@ -33,6 +35,7 @@
      (input "I'd like to adopt a more positive attitude" :checkbox :coaching-goals.positivity )
      (input "I am looking for more meaning and purpose with my life" :checkbox :coaching-goals.purpose )
      (input "I am simply curious about you Liz and want to see how this thing works" :checkbox :coaching-goals.liz )]
+    [:strong {:field :alert :id :coaching-goals :event empty?} "Please choose one!"]
     [:br]
     [:button.btn.waves-effect.waves-light {:on-click #(try-move-next)} "Submit"
   [:i.mdi-content-send.right]]]])
