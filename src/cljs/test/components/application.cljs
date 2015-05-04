@@ -185,17 +185,6 @@
       :S (str "Add a score for " (option-name option))
       (final-parsing (initial-parsed-option-history option) (option-name option) option))))
 
-;; ***** Work on the following:
-;; Recent actions
-;; Mood evaluation and timer
-;; History of actions for a given core value
-;; List of all goals for a given core value
-;; List of all visions
-
-;; (print first-option)
-;; (print second-option)
-;; (set! first-option nil)
-;; (set! second-option nil)
 
 (def current-option nil)
 
@@ -240,6 +229,9 @@
     (condp = (initial-parsed-option-history option)
       :S (set! (.-location js/window) (str "#/modules/scores?current_option=" option))
       (final-parsing-link (initial-parsed-option-history option) option))))
+
+(defn setup-mood []
+  (swap! gratitude-log assoc-in [:mood-counter :show-status] 1))
 
 (defn setup-visions []
   (loop [current @core-values-state
@@ -300,7 +292,9 @@
        [:h5 (parse-option-history third-option)]]]
      (when (= (get-in @gratitude-log [:mood-counter :show-status]) 1)
        [:div.col.s12.m4
-        [:div.card-panel.red {:on-click #(set! (.-location js/window) "#/introduction/mood-assessment-initial")}
+        [:div.card-panel.red {:on-click #(do
+                                           (swap! prefs assoc-in [:mood] nil)
+                                           (set! (.-location js/window) "#/introduction/mood-assessment-initial"))}
          [:h5 "Assess your mood"]]])
      ]]])
 
@@ -322,8 +316,6 @@
     [:div.divider]
     (content-component)]])
 
-;; Mobile like notifications
-;; (js/toast "I am a testing toast" 4000)
 
 (defn component []
   (reagent/create-class
